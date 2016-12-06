@@ -211,7 +211,7 @@ var participantSetup = [
                         {
                         "type": "text",
                         "variableName": "participant_id",
-                        "questionPrompt": "Please type in your participant ID (and keep the same one throughout the study!), using your initials, year of birth, and first letter from your country of origin. For example: for Caterina Constantinescu, born in Romania in 1990, this would be: CC1990R",
+                        "questionPrompt": "Please type in your participant ID as: your initials + year of birth + first letter from country of origin. Example:  AF1990S  , for Alex Farrell, born in 1990, in Scotland. Always keep the same ID!",
                         },
                         {
                     	"type": "timePicker",
