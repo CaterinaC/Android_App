@@ -41,25 +41,25 @@ var surveyQuestions = [
     {
         "type": "slider",
         "variableName": "thermometerValence",
-        "questionPrompt": "Please indicate how you are feeling at the moment, where 0 = extremely unpleasant; 0 = neither pleasant, nor unpleasant; +50 = extremely pleasant. You can give your answer by moving the slider up or down, and you can see the value to the right of the slider.",
+        "questionPrompt": "Please indicate how you are feeling at the moment, where 0 = extremely unpleasant; 50 = neither pleasant, nor unpleasant; 100 = extremely pleasant. You can give your answer by moving the slider up or down, and you can see the value to the right of the slider.",
         "minResponse": 0,
-        "maxResponse": 50
+        "maxResponse": 100
     },
     /*4*/
     {
         "type": "slider",
         "variableName": "thermometerArousal",
-        "questionPrompt": "Please indicate how you are feeling at the moment, where 0 = extremely bored/sleepy/relaxed; 0 = neutral; +50 = extremely alert/agitated. You can give your answer by moving the slider up or down, and you can see the value to the right of the slider.",
+        "questionPrompt": "Please indicate how you are feeling at the moment, where 0 = extremely bored/sleepy/relaxed; 50 = neutral; 100 = extremely alert/agitated. You can give your answer by moving the slider up or down, and you can see the value to the right of the slider.",
         "minResponse": 0,
-        "maxResponse": 50
+        "maxResponse": 100
     },
     /*5*/
     {
         "type": "slider",
         "variableName": "thermometerDominance",
-        "questionPrompt": "Please indicate how you are feeling at the moment, where 0 = completely overwhelmed by the situation; 0 = neither overwhelmed, nor in control; +50 = extremely dominant / in control of the situation. You can give your answer by moving the slider up or down, and you can see the value to the right of the slider.",
+        "questionPrompt": "Please indicate how you are feeling at the moment, where 0 = completely overwhelmed by the situation; 50 = neither overwhelmed, nor in control; 100 = extremely dominant / in control of the situation. You can give your answer by moving the slider up or down, and you can see the value to the right of the slider.",
         "minResponse": 0,
-        "maxResponse": 50
+        "maxResponse": 100
     },
     /*6*/
     {
@@ -439,7 +439,7 @@ var app = {
     saveData:function() {
         $.ajax({
             type: 'get',
-            url: 'https://script.google.com/macros/s/AKfycbzzbp0437BkTqx95W9THF9JhWcydzn-K-FJTbwIHF23-S0JbDXG/exec',
+            url: 'https://script.google.com/macros/s/AKfycbzorRQG-JNAkC9JjYqT3pEwYPIo3ocTdC5zzom9OQpbVSmX_30N/exec',
             data: localStore,
             crossDomain: true,
             success: function (result) {
@@ -458,7 +458,7 @@ var app = {
     saveDataLastPage:function() {
         $.ajax({
             type: 'get',
-            url: 'https://script.google.com/macros/s/AKfycbzzbp0437BkTqx95W9THF9JhWcydzn-K-FJTbwIHF23-S0JbDXG/exec',
+            url: 'https://script.google.com/macros/s/AKfycbzorRQG-JNAkC9JjYqT3pEwYPIo3ocTdC5zzom9OQpbVSmX_30N/exec',
             data: localStore,
             crossDomain: true,
             success: function (result) {
