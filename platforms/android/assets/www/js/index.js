@@ -8,7 +8,10 @@ var participantSetup = [
     {
         "type": "text",
         "variableName": "participant_id",
-        "questionPrompt": "Please type in your participant ID as: your initials + year of birth + first letter from country of origin. Example:  AF1990S  , for Alex Farrell, born in 1990, in Scotland. Always keep the same ID!",
+        "questionPrompt": "<p align='justify'>Please type in your participant ID as:</p>" +
+                          "<p> Your initials + Year of birth + First letter from country of origin.</p>" +
+                          "<p align='left'>EXAMPLE: AF1990S, for Alex Farrell, born in 1990, in Scotland.</p>" +
+                          "<p>ALWAYS KEEP THE EXACT SAME ID!</p>" // Align center is the default.
     }
 ];
 
@@ -29,19 +32,25 @@ var surveyQuestions = [
     {
         "type": "text",
         "variableName": "participant_id",
-        "questionPrompt": "Please type in your participant ID again, as: your initials + year of birth + first letter from your country of origin (example: AF1990S)."
+        "questionPrompt": "<p align='justify'>Please type in your participant ID again, as:</p>" +
+                          "<p> Your initials + Year of birth + First letter from country of origin.</p>" +
+                          "<p>Example: AF1990S</p>"
     },
     /*2*/
     {
         "type": "instructions",
         "variableName": "generalInstructions",
-        "questionPrompt": "On the following screens, we will be asking you questions about your experiences within the last 30 minutes."
+        "questionPrompt": "On the following screens, we will be asking you questions about your emotional experiences within the last 30 minutes."
     },
     /*3*/
     {
         "type": "slider",
         "variableName": "thermometerValence",
-        "questionPrompt": "Please indicate how you are feeling at the moment, where 0 = extremely unpleasant; 50 = neither pleasant, nor unpleasant; 100 = extremely pleasant. You can give your answer by moving the slider up or down, and you can see the value to the right of the slider.",
+        "questionPrompt": "<p>Please indicate how you are feeling at the moment, where:</p>" +
+                          "<p>100 = extremely pleasant;</p>" +
+                          "<p>50 = neither pleasant, nor unpleasant;</p>" +
+                          "<p>0 = extremely unpleasant.</p>" +
+                          "<p>You can give your answer by moving the slider up or down, and you can see the value to the right of the slider.</p>",
         "minResponse": 0,
         "maxResponse": 100
     },
@@ -49,7 +58,11 @@ var surveyQuestions = [
     {
         "type": "slider",
         "variableName": "thermometerArousal",
-        "questionPrompt": "Please indicate how you are feeling at the moment, where 0 = extremely bored/sleepy/relaxed; 50 = neutral; 100 = extremely alert/agitated. You can give your answer by moving the slider up or down, and you can see the value to the right of the slider.",
+        "questionPrompt": "<p>Please indicate how you are feeling at the moment, where:</p>" +
+                          "<p>100 = extremely alert/agitated;</p>" +
+                          "<p>50 = neutral;</p>" +
+                          "<p>0 = extremely bored/sleepy/relaxed.</p>" +
+                          "<p>You can give your answer by moving the slider up or down, and you can see the value to the right of the slider.</p>",
         "minResponse": 0,
         "maxResponse": 100
     },
@@ -57,7 +70,11 @@ var surveyQuestions = [
     {
         "type": "slider",
         "variableName": "thermometerDominance",
-        "questionPrompt": "Please indicate how you are feeling at the moment, where 0 = completely overwhelmed by the situation; 50 = neither overwhelmed, nor in control; 100 = extremely dominant / in control of the situation. You can give your answer by moving the slider up or down, and you can see the value to the right of the slider.",
+        "questionPrompt": "<p>Please indicate how you are feeling at the moment, where:</p>" +
+                          "<p>100 = extremely dominant / in control of the situation;</p>" +
+                          "<p>50 = neither overwhelmed, nor in control;</p>" +
+                          "<p>0 = completely overwhelmed by the situation.</p>" +
+                          "<p>You can give your answer by moving the slider up or down, and you can see the value to the right of the slider.</p>",
         "minResponse": 0,
         "maxResponse": 100
     },
@@ -105,7 +122,7 @@ var surveyQuestions = [
 ];
 
 var lastPage = [
-    {"message": "Thank you for completing today’s questions. Please wait while the data is sent to our servers..."},
+    {"message": "Thank you for completing this session's questions. Please wait while the data is sent to our servers..."},
     {"message": "That's cool! I'll notify you again in 10 minutes!"},
     {"message": "Thank you for installing our app. Please wait while the data is sent to our servers..."}
 ];
@@ -180,7 +197,7 @@ var app = {
         }
 
         questionPrompt = question.questionPrompt;
-        question.questionText = Mustache.render(questionTextTmpl, {questionPrompt: questionPrompt});
+        question.questionText = Mustache.render(eval(questionTextTmpl), {questionPrompt: questionPrompt});
 
         //Now populate the view for this question, depending on what the question type is
         switch (question.type) {
@@ -467,7 +484,7 @@ var app = {
                 localStore.participant_id = pid;
                 localStore.snoozed = snoozed;
                 localStore.uniqueKey = uniqueKey;
-                $("#question").html("<h3>Your responses have been recorded. Thank you for completing this survey.</h3>");
+                $("#question").html("<h3>Your responses have been recorded. Thank you! </h3>");
             },
             error: function (request, error) {
                 console.log(error);

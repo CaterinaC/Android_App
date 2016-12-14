@@ -30,15 +30,16 @@ body {
     -webkit-touch-callout: none;                /* prevent callout to copy image, etc when tap to hold */
     -webkit-text-size-adjust: none;             /* prevent webkit from resizing text to fit */
     -webkit-user-select: none;                  /* prevent copy paste, to allow, change 'none' to 'text' */
-    background-color:#002A5C;
+    background-color:#a1afc6;
     font-family:Helvetica, Arial, sans-serif;
+	font-weight: bold;
 	text-align:center;
-	font-size:1.0625em;
+	font-size:1em;
     height:100%;
-    margin:0em;
+    margin:0.5em;
     padding:0em;
-    width:100%;
-	color: #FFFFFF;
+    width:95%;
+	color:#2d2a2a; /* Text color */
 }
 
 button {
@@ -70,7 +71,7 @@ textarea {
 input[type=range] {
 	-webkit-appearance: slider-vertical;
 	writing-mode: vertical-lr;
-	height: 400px;
+	height: 300px; /* Length of slider bar? */
 }
 
 input[type=range]::-webkit-slider-runnable-track {
