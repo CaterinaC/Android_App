@@ -358,7 +358,7 @@ var app = {
 
     /* Record User Responses */
     recordResponse: function(button, count, type) {
-        //Record date (create new date object
+        //Record date (create new date object)
 
         var datestamp = new Date();
         var year = datestamp.getFullYear(), month = datestamp.getMonth(), day=datestamp.getDate(), hours=datestamp.getHours(), minutes=datestamp.getMinutes(), seconds=datestamp.getSeconds();
@@ -408,8 +408,6 @@ var app = {
             currentQuestion = button.split(",",1);
         }
 
-        //if (count == 6) {name = response;} // IS THIS SUPPOSED TO BE ANOTHER ELSE IF? Or what is this here, out of the blue.
-        //if (count <= -1) {uniqueRecord = currentQuestion;} // Why is else below all by itself?!?!?!??!?!?
          uniqueRecord = uniqueKey + "_" + currentQuestion + "_" + year + "_" + month + "_" + day + "_" + hours + "_" + minutes + "_" + seconds;
 
 
@@ -503,37 +501,27 @@ var app = {
     },
 
     scheduleNotifs:function() {
-        //cordova.plugins.backgroundMode.enable();
+        cordova.plugins.backgroundMode.enable();
         var interval1, interval2, interval3, interval4;
         var a, b, c, d;
         var date1, date2, date3, date4;
         var currentMaxHour, currentMaxMinutes, currentMinHour, currenMinMinutes, nextMinHour, nextMinMinutes;
         var currentLag, maxInterval;
         var day = 86400000;
-        var minDiaryLag = 3600000; // (60 mins in millis) minimum gap between measures
-        var randomDiaryLag = 7200000; //120 minutes gets used with above to ensure max 180 mins between measures
-     //   var weekdayDinnerTime = str.split("22:00");
-     //   var weekdayWakeTime = str.split("08:00");
+        var minDiaryLag = 7200000; // (2h in milliseconds) minimum gap between measures
+        var randomDiaryLag = 7200000; //2h gets used with above to ensure max 4h between successive measures
         var dateObject = new Date();
         var currentHour = dateObject.getHours(), currentMinute = dateObject.getMinutes();
 
         var now = dateObject.getTime();
-        for (var i = 0; i < 14; i ++) {
+        for (var i = 0; i < 14; i ++) { // 14 days of testing since first run of app.
 
-            currentMaxHour = 22;//weekdayDinnerTime[0];
-            currentMaxMinutes = 0;//weekdayDinnerTime[1];
-            currentMinHour = 8;//weekdayWakeTime[0];
-            currenMinMinutes = 0;//weekdayWakeTime[1];
-
-            nextMinHour = currentMinHour;//weekdayWakeTime[0];
-            nextMinMinutes = currenMinMinutes;//weekdayWakeTime[1];
-
-
+            currentMaxHour = 22;
+            currentMaxMinutes = 0; //("22:00")
+            currentMinHour = 8;
+            currenMinMinutes = 0; // ("08:00")
 
             currentLag = (((((24 - parseInt(currentHour) + parseInt(currentMinHour))*60) - parseInt(currentMinute) + parseInt(currenMinMinutes))*60)*1000);
-
-
-          //  nightlyLag= (((((24 - parseInt(currentHour) + parseInt(nextMinHour))*60) - parseInt(currentMinute) + parseInt(nextMinMinutes))*60)*1000);
 
             maxInterval = (((((parseInt(currentMaxHour) - parseInt(currentMinHour))*60) + parseInt(currentMaxMinutes) - parseInt(currenMinMinutes))*60)*1000);
             interval1 = parseInt(currentLag) + (parseInt(Math.round(Math.random()*randomDiaryLag)+minDiaryLag)) + day*i;
@@ -557,7 +545,7 @@ var app = {
             cordova.plugins.notification.local.schedule({icon: 'ic_launcher', id: c, at: date3, text: 'Time for your next Diary Survey!', title: 'Diary Survey'});
             cordova.plugins.notification.local.schedule({icon: 'ic_launcher', id: d, at: date4, text: 'Time for your next Diary Survey!', title: 'Diary Survey'});
 
-            localStore['notification_' + i + '_1'] = localStore.participant_id + "_" + a + "_" + date1;
+            localStore['notification_' + i + '_1'] = localStore.participant_id + "_" + a + "_" + date1; //e.g., notification_0_1,	undefined_101_Thu Dec 15 2016 09:21:38 GMT-0500 (EST)
             localStore['notification_' + i + '_2'] = localStore.participant_id + "_" + b + "_" + date2;
             localStore['notification_' + i + '_3'] = localStore.participant_id + "_" + c + "_" + date3;
             localStore['notification_' + i + '_4'] = localStore.participant_id + "_" + d + "_" + date4;
