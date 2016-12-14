@@ -6,10 +6,18 @@ var localStore = window.localStorage;
 
 var participantSetup = [
     {
+        "type": "instructions",
+        "variableName": "welcomeMessage",
+        "questionPrompt": "<p>Hello, and thanks for installing our app!</p>" +
+                          "<p>You will be beeped 4 times a day over the next 2 weeks, and asked to answer some questions here.</p>" +
+                          "<p>Press the button below to continue!</p>"
+    },
+    {
+
         "type": "text",
         "variableName": "participant_id",
-        "questionPrompt": "<p align='justify'>Please type in your participant ID as:</p>" +
-                          "<p> Your initials + Year of birth + First letter from country of origin.</p>" +
+        "questionPrompt": "<p>Please type in your participant ID as:</p>" +
+                          "<p>Your initials + Year of birth + First letter from country of origin.</p>" +
                           "<p align='left'>EXAMPLE: AF1990S, for Alex Farrell, born in 1990, in Scotland.</p>" +
                           "<p>ALWAYS KEEP THE EXACT SAME ID!</p>" // Align center is the default.
     }
@@ -32,8 +40,8 @@ var surveyQuestions = [
     {
         "type": "text",
         "variableName": "participant_id",
-        "questionPrompt": "<p align='justify'>Please type in your participant ID again, as:</p>" +
-                          "<p> Your initials + Year of birth + First letter from country of origin.</p>" +
+        "questionPrompt": "<p>Please type in your participant ID again, as:</p>" +
+                          "<p>Your initials + Year of birth + First letter from country of origin.</p>" +
                           "<p>Example: AF1990S</p>"
     },
     /*2*/
@@ -124,7 +132,7 @@ var surveyQuestions = [
 var lastPage = [
     {"message": "Thank you for completing this session's questions. Please wait while the data is sent to our servers..."},
     {"message": "That's cool! I'll notify you again in 10 minutes!"},
-    {"message": "Thank you for installing our app. Please wait while the data is sent to our servers..."}
+    {"message": "Thanks again for installing our app. Please wait while the data is sent to our servers..."}
 ];
 
 
