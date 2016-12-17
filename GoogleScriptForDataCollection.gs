@@ -27,11 +27,13 @@ function doGet(localStore) {
             //data colsection days
             var endDate = today.getDate() + 14;
             var daysAfterDataCollection = new Date(endYear, endMonth, endDate);
-            complianceSheet.getRange(complianceNewRow,5).setValue(daysAfterDataCollection);
+            complianceSheet.getRange(complianceNewRow,3).setValue(daysAfterDataCollection);
             //this code will delete the extra columns in each sheet so can write more data to each spreadsheet
             //Each spreadsheet can only have a maximum of 2 million cells
             sheet.deleteColumns(3, 24); //  NOTE: Caterina commented out this and line below to see if extra data on spreadsheet
             splicedSheet.deleteColumns(3, 24);
+          
+
         }
 
         var newRow = sheet.getLastRow()+1;
@@ -42,6 +44,15 @@ function doGet(localStore) {
             splicedSheet.getRange(newRow, 2).setValue(localStore.parameters[Object.keys(localStore.parameters)[key]]);
             newRow = newRow + 1;
         }
+      
+                
+        var sheetRange = sheet.getRange("A:B");
+        var splicedSheetRange = splicedSheet.getRange("A:B");
+        // Sorts by the values in the first column (A)
+        sheetRange.sort(1);
+        splicedSheetRange.sort(1);
+
+      
         //create a log of what is going on
         var doc = DocumentApp.openById("1WOfuAnTdM83kXOr2rT7-weFGreq60P6wst457BXABbY");
         var body = doc.getBody();
