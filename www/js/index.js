@@ -1,6 +1,30 @@
 /*ExperienceSampler License
+ The MIT License (MIT)
 
- /* activate localStorage */
+ Copyright (c) 2014-2015 Sabrina Thai & Elizabeth Page-Gould
+
+ Permission is hereby granted, free of charge, to any person obtaining a copy
+ of this software and associated documentation files (the "Software"), to deal
+ in the Software without restriction, including without limitation the rights
+ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ copies of the Software, and to permit persons to whom the Software is
+ furnished to do so, subject to the following conditions:
+
+ The above copyright notice and this permission notice shall be included in all
+ copies or substantial portions of the Software.
+
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ SOFTWARE.
+ */
+
+// All edits from original version have been made by and belong to Caterina Constantinescu, 2016. University of Edinburgh.
+
+/* activate localStorage */
 var localStore = window.localStorage;
 /* surveyQuestion Model (This time, written in "JSON" format to interface more cleanly with Mustache) */
 
@@ -18,8 +42,7 @@ var participantSetup = [
         "variableName": "participant_id",
         "questionPrompt": "<p>Please type in your participant ID as:</p>" +
                           "<p>Your initials + Year of birth + First letter from country of origin.</p>" +
-                          "<p align='left'>EXAMPLE: AF1990S, for Alex Farrell, born in 1990, in Scotland.</p>" +
-                          "<p>ALWAYS KEEP THE EXACT SAME ID!</p>" // Align center is the default.
+                          "<p align='left'>EXAMPLE: AF1990S, for Alex Farrell, born in 1990, in Scotland.</p>" // Align center is the default.
     }
 ];
 
@@ -27,7 +50,7 @@ var surveyQuestions = [
     /*0*/
     {
         "type": "mult1",
-        "variableName": "snooze",
+        "variableName": "Q1_pressPlay",
         "questionPrompt": "Are you able to take the survey now?",
         "minResponse": 0,
         "maxResponse": 1,
@@ -38,22 +61,14 @@ var surveyQuestions = [
     },
     /*1*/
     {
-        "type": "text",
-        "variableName": "participant_id",
-        "questionPrompt": "<p>Please type in your participant ID again, as:</p>" +
-                          "<p>Your initials + Year of birth + First letter from country of origin.</p>" +
-                          "<p>Example: AF1990S</p>"
+        "type": "instructions",
+        "variableName": "Q2_generalInstructions",
+        "questionPrompt": "On the following screens, we will be asking you questions about your emotional experiences within the last 30 minutes."
     },
     /*2*/
     {
-        "type": "instructions",
-        "variableName": "generalInstructions",
-        "questionPrompt": "On the following screens, we will be asking you questions about your emotional experiences within the last 30 minutes."
-    },
-    /*3*/
-    {
         "type": "slider",
-        "variableName": "thermometerValence",
+        "variableName": "Q3_thermometerValence",
         "questionPrompt": "<p>Please indicate how you are feeling at the moment, where:</p>" +
                           "<p>100 = extremely pleasant;</p>" +
                           "<p>50 = neither pleasant, nor unpleasant;</p>" +
@@ -62,10 +77,10 @@ var surveyQuestions = [
         "minResponse": 0,
         "maxResponse": 100
     },
-    /*4*/
+    /*3*/
     {
         "type": "slider",
-        "variableName": "thermometerArousal",
+        "variableName": "Q4_thermometerArousal",
         "questionPrompt": "<p>Please indicate how you are feeling at the moment, where:</p>" +
                           "<p>100 = extremely alert/agitated;</p>" +
                           "<p>50 = neutral;</p>" +
@@ -74,28 +89,28 @@ var surveyQuestions = [
         "minResponse": 0,
         "maxResponse": 100
     },
-    /*5*/
+    /*4*/
     {
         "type": "slider",
-        "variableName": "thermometerDominance",
+        "variableName": "Q5_thermometerDominance",
         "questionPrompt": "<p>Please indicate how you are feeling at the moment, where:</p>" +
-                          "<p>100 = extremely dominant / in control of the situation;</p>" +
+                          "<p>100 = extremely in control of the situation;</p>" +
                           "<p>50 = neither overwhelmed, nor in control;</p>" +
                           "<p>0 = completely overwhelmed by the situation.</p>" +
                           "<p>You can give your answer by moving the slider up or down, and you can see the value to the right of the slider.</p>",
         "minResponse": 0,
         "maxResponse": 100
     },
-    /*6*/
+    /*5*/
     {
         "type": "text",
-        "variableName": "describeSituation",
+        "variableName": "Q6_describeSituation",
         "questionPrompt": "What (emotional) events have occurred within the last 30 minutes?"
     },
-    /*7*/
+    /*6*/
     {
         "type": "mult1",
-        "variableName": "otherParticipant",
+        "variableName": "Q7_otherParticipant",
         "questionPrompt": "Was anyone else involved?",
         "minResponse": 0,
         "maxResponse": 1,
@@ -104,16 +119,16 @@ var surveyQuestions = [
             {"label": "Yes"}
         ]
     },
-    /*8*/
+    /*7*/
     {
         "type": "text",
-        "variableName": "numberOfParticipants",
+        "variableName": "Q8_numberOfParticipants",
         "questionPrompt": "How many other people were involved?"
     },
-    /*9*/
+    /*8*/
     {
         "type": "mult1",
-        "variableName": "eventCategory",
+        "variableName": "Q9_eventCategory",
         "questionPrompt": "Would you class the recent events as:",
         "minResponse": 1,
         "maxResponse": 7,
@@ -166,8 +181,6 @@ var timePickerTmpl = '<li><input id="{{id}}" data-format="HH:mm" data-template="
 var lastPageTmpl = "<h3>{{message}}</h3>";
 
 var uniqueKey;
-
-var name;
 
 var app = {
     // Application Constructor
@@ -338,8 +351,12 @@ var app = {
         }
     },
 
+    /*
+        Question Index -1 means just installed app & asked for participant_id for the first time ever.
+     */
     renderLastPage: function(pageData, question_index) {
         $("#question").html(Mustache.render(lastPageTmpl, pageData));
+        console.log("Inside renderLastPage, question Index is " + question_index);
         if ( question_index == SNOOZEQ ) {
             app.snoozeNotif();
             localStore.snoozed = 1;
@@ -350,8 +367,8 @@ var app = {
         }
         else {
             var datestamp = new Date();
-            var year = datestamp.getFullYear(), month = datestamp.getMonth(), day=datestamp.getDate(), hours=datestamp.getHours(), minutes=datestamp.getMinutes(), seconds=datestamp.getSeconds();
-            localStore[uniqueKey + '.' + "completed" + "_" + "completedSurvey"  + "_" + year + "_" + month + "_" + day + "_" + hours + "_" + minutes + "_" + seconds] = 1;
+            var year=datestamp.getFullYear(), month=datestamp.getMonth(), day=datestamp.getDate(), hours=datestamp.getHours(), minutes=datestamp.getMinutes(), seconds=datestamp.getSeconds();
+            localStore[localStore.participant_id + "_" + uniqueKey + "_" + "has" + "_" + "completedSurvey"  + "_" + year + "_" + month + "_" + day + "_" + hours + "_" + minutes + "_" + seconds] = 1;
             app.saveDataLastPage();
         }
     },
@@ -359,7 +376,6 @@ var app = {
     /* Record User Responses */
     recordResponse: function(button, count, type) {
         //Record date (create new date object)
-
         var datestamp = new Date();
         var year = datestamp.getFullYear(), month = datestamp.getMonth(), day=datestamp.getDate(), hours=datestamp.getHours(), minutes=datestamp.getMinutes(), seconds=datestamp.getSeconds();
         //Record value of text field
@@ -408,19 +424,32 @@ var app = {
             currentQuestion = button.split(",",1);
         }
 
-         uniqueRecord = uniqueKey + "_" + currentQuestion + "_" + year + "_" + month + "_" + day + "_" + hours + "_" + minutes + "_" + seconds;
+        //save metadata vars to localstore for use maintaining state later
+        if (currentQuestion=="participant_id") {
+            localStore.participant_id = response;
+            localStore.uniqueKey = uniqueKey;
+        }
+
+        uniqueRecord = localStore.participant_id + "_" + uniqueKey + "_" + currentQuestion + "_" + year + "_" + month + "_" + day + "_" + hours + "_" + minutes + "_" + seconds;
 
 
-        //Save this to local storage
-        localStore[uniqueRecord] = response;
+
+
+        if (currentQuestion != "welcomeMessage") {
+            localStore[uniqueRecord] = response;
+        }
+
         //Identify the next question to populate the view
         //This is where you do the Question Logic
         //if (count <= -1) {console.log(uniqueRecord);}
-        if (count == -1) {app.scheduleNotifs(); app.renderLastPage(lastPage[2], count);} // "Tx for install, data sent to servers."
+        if (count == -1) {
+            console.log("we want to call schedule notifs and then render las page");
+            app.scheduleNotifs(); app.renderLastPage(lastPage[2], count);
+        } // "Tx for install, data sent to servers."
         else if (count == SNOOZEQ && response == 0) {app.renderLastPage(lastPage[1], count);} // "That's cool, I'll notify you again in 10mins"
 
-        else if (count == 7 && response == 0) {$("#question").fadeOut(400, function () {$("#question").html("");app.renderQuestion(9);});}
-        else if (count == 7 && response == 1) {$("#question").fadeOut(400, function () {$("#question").html("");app.renderQuestion(8);});}
+        else if (count == 6 && response == 0) {$("#question").fadeOut(400, function () {$("#question").html("");app.renderQuestion(8);});}
+        else if (count == 6 && response == 1) {$("#question").fadeOut(400, function () {$("#question").html("");app.renderQuestion(7);});}
 
         else if (count < surveyQuestions.length-1) {$("#question").fadeOut(400, function () {$("#question").html("");app.renderQuestion(count+1);});}
         else {app.renderLastPage(lastPage[0], count);} // "Thank you for completing the questions"
@@ -460,39 +489,66 @@ var app = {
     },
 
     saveData:function() {
+        // take a local copy of app state data to rebuild localStore in a minute
+        var pid = localStore.participant_id, snoozed = localStore.snoozed,
+            uniqueKey = localStore.uniqueKey, pause_time = localStore.pause_time;
+
+        // remove state data from localStore so that it isn't sent to database every time
+        delete localStore.snoozed;
+        delete localStore.uniqueKey;
+        delete localStore.pause_time;
+
         $.ajax({
             type: 'get',
             url: 'https://script.google.com/macros/s/AKfycbzorRQG-JNAkC9JjYqT3pEwYPIo3ocTdC5zzom9OQpbVSmX_30N/exec',
             data: localStore,
             crossDomain: true,
             success: function (result) {
-                var pid = localStore.participant_id, snoozed = localStore.snoozed,
-                    uniqueKey = localStore.uniqueKey, pause_time = localStore.pause_time;
                 localStore.clear();
+
+                // rebuild localStore state data
                 localStore.participant_id = pid;
                 localStore.snoozed = snoozed;
                 localStore.uniqueKey = uniqueKey;
                 localStore.pause_time = pause_time;
             },
-            error: function (request, error) {console.log(error);},
+            error: function (request, error) {
+                console.log("saving data failed with following error:");
+                console.log(error);
+            }
         });
     },
 
     saveDataLastPage:function() {
+        // take a local copy of app state data to rebuild localStore in a minute
+        var pid = localStore.participant_id, snoozed = localStore.snoozed,
+            uniqueKey = localStore.uniqueKey, pause_time = localStore.pause_time;
+
+        // remove state data from localStore so that it isn't sent to database every time
+        delete localStore.snoozed;
+        delete localStore.uniqueKey;
+        delete localStore.pause_time;
+
+        console.log("and inside save data the arra looks liek this");
+        console.log(localStore);
+
         $.ajax({
             type: 'get',
             url: 'https://script.google.com/macros/s/AKfycbzorRQG-JNAkC9JjYqT3pEwYPIo3ocTdC5zzom9OQpbVSmX_30N/exec',
             data: localStore,
             crossDomain: true,
             success: function (result) {
-                var pid = localStore.participant_id, snoozed = localStore.snoozed, uniqueKey = localStore.uniqueKey;
                 localStore.clear();
+
+                // rebuild localStore
                 localStore.participant_id = pid;
                 localStore.snoozed = snoozed;
                 localStore.uniqueKey = uniqueKey;
+                localStore.pause_time = pause_time;
                 $("#question").html("<h3>Your responses have been recorded. Thank you! </h3>");
             },
             error: function (request, error) {
+                console.log("saving data failed with following error:");
                 console.log(error);
                 $("#question").html("<h3>Please try resending data. If problems persist, please contact the researchers.</h3><br><button>Resend data</button>");
                 $("#question button").click(function () {app.saveDataLastPage();});
@@ -501,11 +557,12 @@ var app = {
     },
 
     scheduleNotifs:function() {
+
         cordova.plugins.backgroundMode.enable();
         var interval1, interval2, interval3, interval4;
         var a, b, c, d;
         var date1, date2, date3, date4;
-        var currentMaxHour, currentMaxMinutes, currentMinHour, currenMinMinutes, nextMinHour, nextMinMinutes;
+        var currentMaxHour, currentMaxMinutes, currentMinHour, currentMinMinutes;
         var currentLag, maxInterval;
         var day = 86400000;
         var minDiaryLag = 7200000; // (2h in milliseconds) minimum gap between measures
@@ -519,11 +576,11 @@ var app = {
             currentMaxHour = 22;
             currentMaxMinutes = 0; //("22:00")
             currentMinHour = 8;
-            currenMinMinutes = 0; // ("08:00")
+            currentMinMinutes = 0; // ("08:00")
 
-            currentLag = (((((24 - parseInt(currentHour) + parseInt(currentMinHour))*60) - parseInt(currentMinute) + parseInt(currenMinMinutes))*60)*1000);
+            currentLag = (((((24 - parseInt(currentHour) + parseInt(currentMinHour))*60) - parseInt(currentMinute) + parseInt(currentMinMinutes))*60)*1000);
 
-            maxInterval = (((((parseInt(currentMaxHour) - parseInt(currentMinHour))*60) + parseInt(currentMaxMinutes) - parseInt(currenMinMinutes))*60)*1000);
+            maxInterval = (((((parseInt(currentMaxHour) - parseInt(currentMinHour))*60) + parseInt(currentMaxMinutes) - parseInt(currentMinMinutes))*60)*1000);
             interval1 = parseInt(currentLag) + (parseInt(Math.round(Math.random()*randomDiaryLag)+minDiaryLag)) + day*i;
             interval2 = interval1 + (parseInt(Math.round(Math.random()*randomDiaryLag)+minDiaryLag));
             interval3 = interval2 + (parseInt(Math.round(Math.random()*randomDiaryLag)+minDiaryLag));
@@ -545,15 +602,23 @@ var app = {
             cordova.plugins.notification.local.schedule({icon: 'ic_launcher', id: c, at: date3, text: 'Time for your next Diary Survey!', title: 'Diary Survey'});
             cordova.plugins.notification.local.schedule({icon: 'ic_launcher', id: d, at: date4, text: 'Time for your next Diary Survey!', title: 'Diary Survey'});
 
-            localStore['notification_' + i + '_1'] = localStore.participant_id + "_" + a + "_" + date1; //e.g., notification_0_1,	undefined_101_Thu Dec 15 2016 09:21:38 GMT-0500 (EST)
-            localStore['notification_' + i + '_2'] = localStore.participant_id + "_" + b + "_" + date2;
-            localStore['notification_' + i + '_3'] = localStore.participant_id + "_" + c + "_" + date3;
-            localStore['notification_' + i + '_4'] = localStore.participant_id + "_" + d + "_" + date4;
+            localStore[localStore.participant_id + "_" + 'notification_' + i + '_1'] = localStore.participant_id + "_" + a + "_" + date1; //e.g., notification_0_1,	undefined_101_Thu Dec 15 2016 09:21:38 GMT-0500 (EST)
+            localStore[localStore.participant_id + "_" + 'notification_' + i + '_2'] = localStore.participant_id + "_" + b + "_" + date2;
+            localStore[localStore.participant_id + "_" + 'notification_' + i + '_3'] = localStore.participant_id + "_" + c + "_" + date3;
+            localStore[localStore.participant_id + "_" + 'notification_' + i + '_4'] = localStore.participant_id + "_" + d + "_" + date4;
+            console.log("adding to localstore " + i + " should be" );
+            console.log("[" + localStore.participant_id + "_" + 'notification_' + i + '_1' + "]");
+            console.log ("  =  ");
+            console.log (localStore.participant_id + "_" + c + "_" + date3);
+            console.log();
+            console.log(localStore)
         }
+        console.log("and at the very bottom of schedulenotifs localstore looks like this: ");
+        console.log( localStore);
     },
 
     snoozeNotif:function() {
-        var now = new Date().getTime(), snoozeDate = new Date(now + 600*1000);
+        var now = new Date().getTime(), snoozeDate = new Date(now + 600*1000); // 10 minutes
         var id = '99';
         cordova.plugins.notification.local.schedule({
             icon: 'ic_launcher',
@@ -568,6 +633,7 @@ var app = {
     validateResponse: function(data){
         var text = data.val();
 //         console.log(text);
+
         if (text === ""){
             return false;
         } else {
