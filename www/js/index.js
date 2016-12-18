@@ -458,13 +458,24 @@ var app = {
             console.log("we want to call schedule notifs and then render las page");
             app.scheduleNotifs(); app.renderLastPage(lastPage[2], count);
         } // "Tx for install, data sent to servers."
-        else if (count == SNOOZEQ && response == 0) {app.renderLastPage(lastPage[1], count);} // "That's cool, I'll notify you again in 10mins"
+        else if (count == SNOOZEQ && response == 0) {
+            app.renderLastPage(lastPage[1], count);
+        } // "That's cool, I'll notify you again in 10mins"
 
-        else if (count == 6 && response == 0) {$("#question").fadeOut(400, function () {$("#question").html("");app.renderQuestion(8);});}
-        else if (count == 6 && response == 1) {$("#question").fadeOut(400, function () {$("#question").html("");app.renderQuestion(7);});}
+        else if (count == 6 && response == 0) {
+            $("#question").fadeOut(400, function () {$("#question").html("");app.renderQuestion(8);});
+            localStore[localStore.participant_id + "_" + uniqueKey + "_Q8_numberOfParticipants_" + year + "_" + month + "_" + day + "_" + hours + "_" + minutes + "_" + seconds] = 'None';
+        }
+        else if (count == 6 && response == 1) {
+            $("#question").fadeOut(400, function () {$("#question").html("");app.renderQuestion(7);});
+        }
 
-        else if (count < surveyQuestions.length-1) {$("#question").fadeOut(400, function () {$("#question").html("");app.renderQuestion(count+1);});}
-        else {app.renderLastPage(lastPage[0], count);} // "Thank you for completing the questions"
+        else if (count < surveyQuestions.length-1) {
+            $("#question").fadeOut(400, function () {$("#question").html("");app.renderQuestion(count+1);});
+        }
+        else {
+            app.renderLastPage(lastPage[0], count);
+        } // "Thank you for completing the questions"
     },
 
     /* Prepare for Resume and Store Data */
