@@ -121,9 +121,21 @@ var surveyQuestions = [
     },
     /*7*/
     {
-        "type": "text",
+        "type": "mult1",
         "variableName": "Q8_numberOfParticipants",
-        "questionPrompt": "How many other people were involved?"
+        "questionPrompt": "How many other people were involved?",
+        "minResponse": 1,
+        "maxResponse": 8,
+        "labels": [
+            {"label": "1"},
+            {"label": "2"},
+            {"label": "3"},
+            {"label": "4"},
+            {"label": "5"},
+            {"label": "6"},
+            {"label": "7"},
+            {"label": "Over 7"}
+        ]
     },
     /*8*/
     {

@@ -23,7 +23,7 @@
     <feature name="BackgroundMode">
         <param name="android-package" value="de.appplant.cordova.plugin.background.BackgroundMode" />
     </feature>
-    <name>Rating Emotions</name>
+    <name>Rating emotions</name>
     <description>
         An Apache Cordova application by Caterina Constantinescu, University of Edinburgh.
     </description>
