@@ -95,7 +95,7 @@ var surveyQuestions = [
         "variableName": "Q5_thermometerDominance",
         "questionPrompt": "<p>Please indicate how you are feeling at the moment, where:</p>" +
                           "<p>100 = extremely in control of the situation;</p>" +
-                          "<p>50 = neither overwhelmed, nor in control;</p>" +
+                          "<p>50 = neither in control, nor overwhelmed;</p>" +
                           "<p>0 = completely overwhelmed by the situation.</p>" +
                           "<p>You can give your answer by moving the slider up or down, and you can see the value to the right of the slider.</p>",
         "minResponse": 0,
