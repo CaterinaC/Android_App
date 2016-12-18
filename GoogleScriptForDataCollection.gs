@@ -24,7 +24,7 @@ function doGet(localStore) {
             complianceSheet.getRange(complianceNewRow,2).setValue(today);// this might be why we have blank cols - mibbe change 2
             var endYear = today.getFullYear(), endMonth = today.getMonth();
             //the number of days you add is equal to the number of days you collect data. If you choose to use the compliance checker, add 2 to the number of 
-            //data colsection days
+            //data collection days
             var endDate = today.getDate() + 14;
             var daysAfterDataCollection = new Date(endYear, endMonth, endDate);
             complianceSheet.getRange(complianceNewRow,3).setValue(daysAfterDataCollection);
@@ -45,15 +45,57 @@ function doGet(localStore) {
             newRow = newRow + 1;
         }
       
-                
+      
+        // Sorts by the values in the first column (A)  
         var sheetRange = sheet.getRange("A:B");
         var splicedSheetRange = splicedSheet.getRange("A:B");
-        // Sorts by the values in the first column (A)
         sheetRange.sort(1);
         splicedSheetRange.sort(1);
-
       
-        //create a log of what is going on
+      
+        // Remove duplicates:
+        var data = sheet.getDataRange().getValues();
+        var splicedData = splicedSheet.getDataRange().getValues();
+      
+        var newData = new Array();
+        var newSplicedData = new Array();
+      
+        // // Remove (or replace) dups in Database:
+        for(i in data){
+          var row = data[i];
+          var duplicate = false;
+          for(j in newData){
+            if(row.join() == newData[j].join()){
+              duplicate = true;
+            }
+          }
+          if(!duplicate){
+            newData.push(row);
+          }
+        }
+      
+        // // Remove (or replace) dups in splicedDataset:
+        for(i in splicedData){
+          var splicedRow = splicedData[i];
+          var splicedDuplicate = false;
+          for(j in newSplicedData){
+            if(splicedRow.join() == newSplicedData[j].join()){
+              splicedDuplicate = true;
+            }
+          }
+          if(!splicedDuplicate){
+            newSplicedData.push(splicedRow);
+          }
+        }
+      
+        sheet.clearContents();
+        sheet.getRange(1, 1, newData.length, newData[0].length).setValues(newData);
+        splicedSheet.clearContents();
+        splicedSheet.getRange(1, 1, newSplicedData.length, newSplicedData[0].length).setValues(newSplicedData);
+      
+      
+      
+        //Create a log of what is going on
         var doc = DocumentApp.openById("1WOfuAnTdM83kXOr2rT7-weFGreq60P6wst457BXABbY");
         var body = doc.getBody();
         body.appendParagraph(Logger.getLog());
@@ -88,3 +130,10 @@ function findCell(PID) {
         }
     }
 }
+
+
+
+
+
+
+
