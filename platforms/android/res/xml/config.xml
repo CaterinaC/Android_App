@@ -23,12 +23,12 @@
     <feature name="BackgroundMode">
         <param name="android-package" value="de.appplant.cordova.plugin.background.BackgroundMode" />
     </feature>
-    <name>Rating Emotional Experiences</name>
+    <name>Rating Emotions</name>
     <description>
-        A sample Apache Cordova application that responds to the deviceready event.
+        An Apache Cordova application by Caterina Constantinescu, University of Edinburgh.
     </description>
-    <author email="dev@cordova.apache.org" href="http://cordova.io">
-        Apache Cordova Team
+    <author email="caterina.constantinescu@ed.ac.uk" href="http://www.ed.ac.uk/profile/caterina-constantinescu">
+        Caterina Constantinescu
     </author>
     <content src="index.html" />
     <access origin="*" />
