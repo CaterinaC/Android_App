@@ -451,6 +451,10 @@ var app = {
             localStore[uniqueRecord] = response;
         }
 
+        if ( count == 5) {
+            console.log("question 5 LS UK is " + localStore.uniqueKey + " / UK is " + uniqueKey);
+        }
+
         //Identify the next question to populate the view
         //This is where you do the Question Logic
         //if (count <= -1) {console.log(uniqueRecord);}
@@ -463,6 +467,7 @@ var app = {
         } // "That's cool, I'll notify you again in 10mins"
 
         else if (count == 6 && response == 0) {
+            console.log("question 6 answer 0 - LS UK is " + localStore.uniqueKey + " / UK is " + uniqueKey);
             $("#question").fadeOut(400, function () {$("#question").html("");app.renderQuestion(8);});
             localStore[localStore.participant_id + "_" + uniqueKey + "_Q8_numberOfParticipants_" + year + "_" + month + "_" + day + "_" + hours + "_" + minutes + "_" + seconds] = 'None';
         }
@@ -487,6 +492,7 @@ var app = {
 
     /* Initialize the whole thing */
     init: function() {
+        console.log("In init");
         uniqueKey = new Date().getTime();
         if (localStore.participant_id === " " || !localStore.participant_id) {app.renderQuestion(-NUMSETUPQS);}
         else {
@@ -498,6 +504,8 @@ var app = {
     },
 
     sampleParticipant: function() {
+
+        console.log("We are in SampleParticipant\n " + localStore.uniqueKey + " / " + uniqueKey);
         var current_moment = new Date();
         var current_time = current_moment.getTime();
         if ((current_time - localStore.pause_time) > 600000 || localStore.snoozed == 1) {
@@ -506,7 +514,15 @@ var app = {
             app.renderQuestion(0);
         }
         else {
-            uniqueKey = localStore.uniqueKey;
+            if (!isNaN(localStore.uniqueKey)) {
+                uniqueKey = localStore.uniqueKey;
+            } else {
+                if ( !isNaN(uniqueKey)) {
+                    localStore.uniqueKey = uniqueKey;
+                } else {
+                    uniqueKey = new Date().getTime()+  "_Unique_key_was_lost";
+                }
+            }
         }
         app.saveData();
     },
@@ -516,10 +532,11 @@ var app = {
         var pid = localStore.participant_id, snoozed = localStore.snoozed,
             uniqueKey = localStore.uniqueKey, pause_time = localStore.pause_time;
 
-        // remove state data from localStore so that it isn't sent to database every time
+        /* remove state data from localStore so that it isn't sent to database every time
         delete localStore.snoozed;
         delete localStore.uniqueKey;
         delete localStore.pause_time;
+        */
 
         $.ajax({
             type: 'get',
@@ -547,10 +564,11 @@ var app = {
         var pid = localStore.participant_id, snoozed = localStore.snoozed,
             uniqueKey = localStore.uniqueKey, pause_time = localStore.pause_time;
 
-        // remove state data from localStore so that it isn't sent to database every time
+        /* remove state data from localStore so that it isn't sent to database every time
         delete localStore.snoozed;
         delete localStore.uniqueKey;
         delete localStore.pause_time;
+        */
 
         console.log("and inside save data the arra looks liek this");
         console.log(localStore);
