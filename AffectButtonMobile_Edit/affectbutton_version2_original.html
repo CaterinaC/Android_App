@@ -1,0 +1,83 @@
+<!-- HTML5 / j-query / mobile
+There is a validated version in HTML5 for v3.3. no need to install Java or Python. It runs in standard HTML5 browsers, and on mobiles, and is j-query compatible. download the rar below. Therein you will find the standard version of the AffectButton embedded in a demo page. Now the button is configured to react as is common in mouse-based systems, so a click enters the values for P, A and D, while moving around changes the face, just like the Java and Python versions. 
+
+You can configure it to react on dragging (for touch-based devices), but then you need a button to input the actual values (uncomment the HTML buttons in the HTML file). In addtion you need to change the event handler function by uncommenting the code in _doMouse() in jquery.ui.affectbutton.js Here's a download. -->
+
+<!DOCTYPE html> 
+<html> 
+<head>
+
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1"> 
+
+<title>AffectButton version 2</title>
+
+<link rel="stylesheet" href="css/jquery.mobile-1.0.1.min.css" />
+
+<!-- <script src="http://code.jquery.com/jquery-1.6.4.min.js"></script> -->
+<script src="js/jquery-1.7.1.min.js"></script>
+<script src="js/jquery.mobile-1.1.0.min.js"></script>
+<script src="js/jquery.ui.affectbutton.js"></script>
+<script src="js/jquery.ui.affectbutton.mobile.js"></script>
+
+</head>
+
+<body>
+
+<div id='index' data-role="page">
+<script>
+  $('#index').bind('pagecreate', function() {
+	   // instantiate the plugin, bind to its change events ...
+	  $(this).find('#affect').affectbutton({
+	}).bind('affectchanged', function(e, a) {
+			// ... so we can update the input element of each component
+			$.each(a, function(c, v) {
+				$('#' + c).val(v);
+			});
+		});
+	  
+		// and, conversely, notify the plugin of changes at the input elements
+		$(this).find('#pleasure, #arousal, #dominance').each(function() {
+			$(this).bind('input', function() {
+				var v = $(this).val();
+				if (v) {
+					$('#affect').affectbutton('affect', this.id, v);
+				}
+			});
+		});
+		
+	});
+</script>
+
+<div data-role="header">
+<h2>AffectButton version 2</h2>
+</div>
+
+
+<div data-role="content" style="max-width:600px; margin:0 auto;">
+
+
+
+<div style="padding:0; width:262px; margin:0 auto;">
+
+	<canvas id="affect" width="100px" height="100px" style="border:0; padding:0;">
+	</canvas>
+	
+	<a href="#" data-role="button" onclick="$('#affect').affectbutton('reset');">Reset</a>
+	<a href="#" data-role="button" onclick="alert('confirm');">Confirm</a>
+    
+	<div data-role="fieldcontain">
+		<label for="pleasure">pleased</label>
+		<input id="pleasure" type="number" value="0" min="-1" max="1" step="0.05" size="4" />
+		<label for="arousal">aroused</label>
+		<input id="arousal" type="number" value="0" min="-1" max="1" step="0.05" />
+		<label for="dominance">dominant</label>
+		<input id="dominance" type="number" value="0" min="-1" max="1" step="0.05" />
+	</div>
+
+</div>
+
+</div> <!--  /content -->
+</div> <!-- /page -->
+</body>
+</html>
