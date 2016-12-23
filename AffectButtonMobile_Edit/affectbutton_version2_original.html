@@ -10,7 +10,7 @@ You can configure it to react on dragging (for touch-based devices), but then yo
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1"> 
 
-<title>AffectButton version 2</title>
+<title>Affect Button</title>
 
 <link rel="stylesheet" href="css/jquery.mobile-1.0.1.min.css" />
 
@@ -50,7 +50,7 @@ You can configure it to react on dragging (for touch-based devices), but then yo
 </script>
 
 <div data-role="header">
-<h2>AffectButton version 2</h2>
+<h2>Affect Button</h2>
 </div>
 
 
@@ -58,20 +58,19 @@ You can configure it to react on dragging (for touch-based devices), but then yo
 
 
 
-<div style="padding:0; width:262px; margin:0 auto;">
+<div style="width:250px; padding-left: 0; padding-right: 0; margin-left: auto; margin-right: auto; display: block;">
 
-	<canvas id="affect" width="100px" height="100px" style="border:0; padding:0;">
-	</canvas>
+	<canvas id="affect" width="250px" height="250px" style="border:0; padding:0;"></canvas>
 	
 	<a href="#" data-role="button" onclick="$('#affect').affectbutton('reset');">Reset</a>
-	<a href="#" data-role="button" onclick="alert('confirm');">Confirm</a>
+	<a href="#" data-role="button" onclick="alert('confirm?');">Confirm</a>
     
 	<div data-role="fieldcontain">
 		<label for="pleasure">pleased</label>
 		<input id="pleasure" type="number" value="0" min="-1" max="1" step="0.05" size="4" />
-		<label for="arousal">aroused</label>
+		<label for="arousal">alert</label>
 		<input id="arousal" type="number" value="0" min="-1" max="1" step="0.05" />
-		<label for="dominance">dominant</label>
+		<label for="dominance">in_control</label>
 		<input id="dominance" type="number" value="0" min="-1" max="1" step="0.05" />
 	</div>
 
