@@ -84,7 +84,7 @@ var surveyQuestions = [
         "questionPrompt": "<p>Please indicate how you are feeling at the moment, where:</p>" +
                           "<p>100 = extremely alert/agitated;</p>" +
                           "<p>50 = neutral;</p>" +
-                          "<p>0 = extremely bored/sleepy/relaxed.</p>" +
+                          "<p>0 = extremely relaxed/bored/sleepy.</p>" +
                           "<p>You can give your answer by moving the slider up or down, and you can see the value to the right of the slider.</p>",
         "minResponse": 0,
         "maxResponse": 100
@@ -474,7 +474,12 @@ var app = {
         else if (count == 6 && response == 1) {
             $("#question").fadeOut(400, function () {$("#question").html("");app.renderQuestion(7);});
         }
-
+        else if (count == 8) {
+            $("#question").fadeOut(400, function () { // With vw/vh, we can size elements to be relative to the size of the viewport.
+                document.write('<style>html, body, iframe{margin: 0; border: 0; padding: 0; display: block; width: 100vw; height: 100vh; background: white; color: black;}iframe {height: calc(100vh); width: calc(100vw);}</style>' +
+                    '<iframe src="https://cdn.rawgit.com/CaterinaC/Android_App/master/AffectButtonMobile_Edit/affectbutton_version2_original.html"></iframe>');
+            });
+        }
         else if (count < surveyQuestions.length-1) {
             $("#question").fadeOut(400, function () {$("#question").html("");app.renderQuestion(count+1);});
         }
@@ -517,6 +522,13 @@ var app = {
             if (!isNaN(localStore.uniqueKey)) {
                 uniqueKey = localStore.uniqueKey;
             } else {
+                /* We don't know why, but for some reason, we lose the uniqueKey session identifier.
+                 Here, the global uniqueKey variable remains in memory, but disappears from the localStore
+                 (which is ultimately what is sent to Google, not the global variables).
+                 This is why we first try to use the global uniqueKey to restore the localStore one.
+                 But failing, that, if we've simply lost it, we create a new session uniqueKey and
+                 we append a string to the end, so it's easy to identify in the sorted Google Sheets
+                 whenever the session ID was lost. */
                 if ( !isNaN(uniqueKey)) {
                     localStore.uniqueKey = uniqueKey;
                 } else {

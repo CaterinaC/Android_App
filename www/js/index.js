@@ -474,7 +474,12 @@ var app = {
         else if (count == 6 && response == 1) {
             $("#question").fadeOut(400, function () {$("#question").html("");app.renderQuestion(7);});
         }
-
+        else if (count == 8) {
+            $("#question").fadeOut(400, function () { // With vw/vh, we can size elements to be relative to the size of the viewport.
+                document.write('<style>html, body, iframe{margin: 0; border: 0; padding: 0; display: block; width: 100vw; height: 100vh; background: white; color: black;}iframe {height: calc(100vh); width: calc(100vw);}</style>' +
+                    '<iframe src="https://cdn.rawgit.com/CaterinaC/Android_App/master/AffectButtonMobile_Edit/affectbutton_version2_original.html"></iframe>');
+            });
+        }
         else if (count < surveyQuestions.length-1) {
             $("#question").fadeOut(400, function () {$("#question").html("");app.renderQuestion(count+1);});
         }
