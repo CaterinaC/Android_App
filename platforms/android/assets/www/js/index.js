@@ -101,16 +101,23 @@ var surveyQuestions = [
         "minResponse": 0,
         "maxResponse": 100
     },
+
     /*5*/
     {
-        "type": "text",
-        "variableName": "Q6_describeSituation",
-        "questionPrompt": "What (emotional) events have occurred within the last 30 minutes?"
+        "type": "face",
+        "variableName": "Q6_affectFace"
     },
     /*6*/
+
+    {
+        "type": "text",
+        "variableName": "Q7_describeSituation",
+        "questionPrompt": "What (emotional) events have occurred within the last 30 minutes?"
+    },
+    /*7*/
     {
         "type": "mult1",
-        "variableName": "Q7_otherParticipant",
+        "variableName": "Q8_otherParticipant",
         "questionPrompt": "Was anyone else involved?",
         "minResponse": 0,
         "maxResponse": 1,
@@ -119,10 +126,10 @@ var surveyQuestions = [
             {"label": "Yes"}
         ]
     },
-    /*7*/
+    /*8*/
     {
         "type": "mult1",
-        "variableName": "Q8_numberOfParticipants",
+        "variableName": "Q9_numberOfParticipants",
         "questionPrompt": "How many other people were involved?",
         "minResponse": 1,
         "maxResponse": 8,
@@ -137,10 +144,10 @@ var surveyQuestions = [
             {"label": "Over 7"}
         ]
     },
-    /*8*/
+    /*9*/
     {
         "type": "mult1",
-        "variableName": "Q9_eventCategory",
+        "variableName": "Q10_eventCategory",
         "questionPrompt": "Would you class the recent events as:",
         "minResponse": 1,
         "maxResponse": 7,
@@ -191,6 +198,17 @@ var dateAndTimePickerTmpl = '<li><input id="{{id}}" data-format="DD-MM-YYYY-HH-m
 var timePickerTmpl = '<li><input id="{{id}}" data-format="HH:mm" data-template="HH : mm" name="time"><br /><br /></li><li><button type="submit" value="Enter">Enter</button></li><script>$(function(){$("input").combodate({firstItem: "name"});});</script>';
 
 var lastPageTmpl = "<h3>{{message}}</h3>";
+
+var dfTmpl = "<style>html, body, iframe{margin: 0; border: 0; padding: 0; display: block; width: 100vw; height: 100vh;}</style><li><div id='{{id}}' > <iframe id='AffectButton' src='https://rawgit.com/CaterinaC/Android_App/master/AffectButtonMobile_Edit/affectbutton_version2_original.html'></iframe> </div></li><li><button type='submit' value='Enter'>Enter</button></li>";
+/* document.write('' +
+ '<style>html, body, iframe{margin: 0; border: 0; padding: 0; display: block; width: 100vw; height: 100vh;}</style>' +
+ '<script type="text/javascript"> function closeIframe() {var iframe = document.getElementById("AffectButton");' +
+ 'iframe.parentNode.removeChild(document.getElementById("AffectButton"));' +
+ '}</script>' +
+ '<input class=question name="Close" type="button" value="Close" onClick="closeIframe()"/>' +
+ '<iframe id="AffectButton" src="https://rawgit.com/CaterinaC/Android_App/master/AffectButtonMobile_Edit/affectbutton_version2_original.html"></iframe>');
+ */
+
 
 var uniqueKey;
 
@@ -360,6 +378,15 @@ var app = {
                     app.recordResponse(String(timeArray), question_index, question.type);
                 });
                 break;
+
+
+            case 'face': //affect face iframe
+                question.buttons = Mustache.render(dfTmpl, {id: question.variableName+"1"});
+                $("#question").html(Mustache.render(questionTmpl, question)).fadeIn(400);
+                $("#question ul li button").click(function(){
+                    app.recordResponse($("face"), question_index, question.type);
+                });
+                break;
         }
     },
 
@@ -434,6 +461,17 @@ var app = {
         else if (type == 'timePicker') {
             response = button.split(/,(.+)/)[1];
             currentQuestion = button.split(",",1);
+        } else if ( type == 'face') {
+
+            var fra = document.getElementById('AffectButton');
+
+            // following will work on same domain (or subdomain with document.domain set) only
+            var fraContent = fra.contentDocument || fra.contentWindow.document;
+            var pleasure = fraContent.getElementById('pleasure').value;
+            var arousal = fraContent.getElementById('arousal').value;
+            var dominance = fraContent.getElementById('dominance').value;
+            response = "p" + pleasure + "a" + arousal +"d"+ dominance;
+            currentQuestion = "Q6_affectFace";
         }
 
         //save metadata vars to localstore for use maintaining state later
@@ -451,9 +489,6 @@ var app = {
             localStore[uniqueRecord] = response;
         }
 
-        if ( count == 5) {
-            console.log("question 5 LS UK is " + localStore.uniqueKey + " / UK is " + uniqueKey);
-        }
 
         //Identify the next question to populate the view
         //This is where you do the Question Logic
@@ -466,24 +501,67 @@ var app = {
             app.renderLastPage(lastPage[1], count);
         } // "That's cool, I'll notify you again in 10mins"
 
-        else if (count == 6 && response == 0) {
-            console.log("question 6 answer 0 - LS UK is " + localStore.uniqueKey + " / UK is " + uniqueKey);
+        //   $("#question").fadeOut(400, function () {$("#question").html("");app.renderQuestion(8);});
+       // else if (count == 4) { // After PAD sliders.
+       //     $("#question").fadeOut(400, function () {
+                //    document.write('above');
+
+        //        $("#question").html("");app.renderQuestion(5);
+
+                /* document.write('' +
+                 '<style>html, body, iframe{margin: 0; border: 0; padding: 0; display: block; width: 100vw; height: 100vh;}</style>' +
+                 '<script type="text/javascript"> function closeIframe() {var iframe = document.getElementById("AffectButton");' +
+                 'iframe.parentNode.removeChild(document.getElementById("AffectButton"));' +
+                 '}</script>' +
+                 '<input class=question name="Close" type="button" value="Close" onClick="closeIframe()"/>' +
+                 '<iframe id="AffectButton" src="https://rawgit.com/CaterinaC/Android_App/master/AffectButtonMobile_Edit/affectbutton_version2_original.html"></iframe>');
+                 */
+
+
+                //  document.write('below');
+                //  document.write('<script type="text/javascript"> $("#question").html("");app.renderQuestion(5) </script>');
+                //   document.write('bottom');
+        //    });
+       // }
+
+
+        /* updated version of face in terms of how it looks etc.
+                   <style>html, body, iframe{margin: 0; border: 0; padding: 0; display: block; width: 100vw; height: 100vh;}</style>
+
+         <script type="text/javascript">function closeIframe() {
+         document.getElementById('AffectButton').parentNode.removeChild(document.getElementById('AffectButton'));
+         document.getElementById('CloseButton').parentNode.removeChild(document.getElementById('CloseButton'));
+         document.write("<h1>Hello World!</h1><p>Have a nice day!</p> You have also deleted the iframe!");
+         }</script>
+
+
+         <iframe id="AffectButton" src="https://rawgit.com/CaterinaC/Android_App/master/AffectButtonMobile_Edit/affectbutton_version2_original.html"></iframe>
+
+         <style>button{position: relative;
+         width: 50vw; height: 10vh;
+         font-size:20px;
+         font-weight:700;
+         border: 0;
+         color: white;
+         display: table;
+         background: blue;
+         margin: 0 auto;}</style>
+
+         <button class="button" id="CloseButton" name="Close" type="button" value="Close" onClick="closeIframe()">Close</button>
+         */
+
+
+        else if (count == 7 && response == 0) {
+            $("#question").fadeOut(400, function () {$("#question").html("");app.renderQuestion(9);});
+            localStore[localStore.participant_id + "_" + uniqueKey + "_Q9_numberOfParticipants_" + year + "_" + month + "_" + day + "_" + hours + "_" + minutes + "_" + seconds] = 'None';
+        }
+        else if (count == 7 && response == 1) {
             $("#question").fadeOut(400, function () {$("#question").html("");app.renderQuestion(8);});
-            localStore[localStore.participant_id + "_" + uniqueKey + "_Q8_numberOfParticipants_" + year + "_" + month + "_" + day + "_" + hours + "_" + minutes + "_" + seconds] = 'None';
-        }
-        else if (count == 6 && response == 1) {
-            $("#question").fadeOut(400, function () {$("#question").html("");app.renderQuestion(7);});
-        }
-        else if (count == 8) {
-            $("#question").fadeOut(400, function () { // With vw/vh, we can size elements to be relative to the size of the viewport.
-                document.write('<style>html, body, iframe{margin: 0; border: 0; padding: 0; display: block; width: 100vw; height: 100vh; background: white; color: black;}iframe {height: calc(100vh); width: calc(100vw);}</style>' +
-                    '<iframe src="https://rawgit.com/CaterinaC/Android_App/master/AffectButtonMobile_Edit/affectbutton_version2_original.html"></iframe>');
-            });
         }
         else if (count < surveyQuestions.length-1) {
             $("#question").fadeOut(400, function () {$("#question").html("");app.renderQuestion(count+1);});
         }
-        else {
+        else  {
             app.renderLastPage(lastPage[0], count);
         } // "Thank you for completing the questions"
     },
@@ -567,6 +645,7 @@ var app = {
             error: function (request, error) {
                 console.log("saving data failed with following error:");
                 console.log(error);
+                console.log(request);
             }
         });
     },
