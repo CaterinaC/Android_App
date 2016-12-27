@@ -199,7 +199,7 @@ var timePickerTmpl = '<li><input id="{{id}}" data-format="HH:mm" data-template="
 
 var lastPageTmpl = "<h3>{{message}}</h3>";
 
-var dfTmpl = "<style>html, body, iframe{margin: 0; border: 0; padding: 0; display: block; width: 100vw; height: 100vh;}</style><li><div id='{{id}}' > <iframe id='AffectButton' src='https://rawgit.com/CaterinaC/Android_App/master/AffectButtonMobile_Edit/affectbutton_version2_original.html'></iframe> </div></li><li><button type='submit' value='Enter'>Enter</button></li>";
+var affectButtonTmpl = "<style>html, body, iframe{margin: 0; border: 0; padding: 0; display: block; width: 100vw; height: 100vh;}</style><li><div id='{{id}}' > <iframe id='AffectButton' src='https://rawgit.com/CaterinaC/Android_App/master/AffectButtonMobile_Edit/affectbutton_version2_original.html'></iframe> </div></li><li><button type='submit' value='Enter'>Enter</button></li>";
 /* document.write('' +
  '<style>html, body, iframe{margin: 0; border: 0; padding: 0; display: block; width: 100vw; height: 100vh;}</style>' +
  '<script type="text/javascript"> function closeIframe() {var iframe = document.getElementById("AffectButton");' +
@@ -381,7 +381,7 @@ var app = {
 
 
             case 'face': //affect face iframe
-                question.buttons = Mustache.render(dfTmpl, {id: question.variableName+"1"});
+                question.buttons = Mustache.render(affectButtonTmpl, {id: question.variableName+"1"});
                 $("#question").html(Mustache.render(questionTmpl, question)).fadeIn(400);
                 $("#question ul li button").click(function(){
                     app.recordResponse($("face"), question_index, question.type);
@@ -395,7 +395,7 @@ var app = {
      */
     renderLastPage: function(pageData, question_index) {
         $("#question").html(Mustache.render(lastPageTmpl, pageData));
-        console.log("Inside renderLastPage, question Index is " + question_index);
+
         if ( question_index == SNOOZEQ ) {
             app.snoozeNotif();
             localStore.snoozed = 1;
@@ -461,7 +461,8 @@ var app = {
         else if (type == 'timePicker') {
             response = button.split(/,(.+)/)[1];
             currentQuestion = button.split(",",1);
-        } else if ( type == 'face') {
+        }
+        else if (type == 'face') {
 
             var fra = document.getElementById('AffectButton');
 
@@ -470,8 +471,8 @@ var app = {
             var pleasure = fraContent.getElementById('pleasure').value;
             var arousal = fraContent.getElementById('arousal').value;
             var dominance = fraContent.getElementById('dominance').value;
-            response = "p" + pleasure + "a" + arousal +"d"+ dominance;
-            currentQuestion = "Q6_affectFace";
+            response = "p_" + pleasure + "_a_" + arousal +"_d_"+ dominance;
+            currentQuestion = "Q6_affectFace"; // Remember to edit Q6 here if necessary, as it is hard-coded.
         }
 
         //save metadata vars to localstore for use maintaining state later
@@ -494,35 +495,12 @@ var app = {
         //This is where you do the Question Logic
         //if (count <= -1) {console.log(uniqueRecord);}
         if (count == -1) {
-            console.log("we want to call schedule notifs and then render las page");
             app.scheduleNotifs(); app.renderLastPage(lastPage[2], count);
         } // "Tx for install, data sent to servers."
         else if (count == SNOOZEQ && response == 0) {
             app.renderLastPage(lastPage[1], count);
         } // "That's cool, I'll notify you again in 10mins"
 
-        //   $("#question").fadeOut(400, function () {$("#question").html("");app.renderQuestion(8);});
-       // else if (count == 4) { // After PAD sliders.
-       //     $("#question").fadeOut(400, function () {
-                //    document.write('above');
-
-        //        $("#question").html("");app.renderQuestion(5);
-
-                /* document.write('' +
-                 '<style>html, body, iframe{margin: 0; border: 0; padding: 0; display: block; width: 100vw; height: 100vh;}</style>' +
-                 '<script type="text/javascript"> function closeIframe() {var iframe = document.getElementById("AffectButton");' +
-                 'iframe.parentNode.removeChild(document.getElementById("AffectButton"));' +
-                 '}</script>' +
-                 '<input class=question name="Close" type="button" value="Close" onClick="closeIframe()"/>' +
-                 '<iframe id="AffectButton" src="https://rawgit.com/CaterinaC/Android_App/master/AffectButtonMobile_Edit/affectbutton_version2_original.html"></iframe>');
-                 */
-
-
-                //  document.write('below');
-                //  document.write('<script type="text/javascript"> $("#question").html("");app.renderQuestion(5) </script>');
-                //   document.write('bottom');
-        //    });
-       // }
 
 
         /* updated version of face in terms of how it looks etc.
@@ -575,7 +553,6 @@ var app = {
 
     /* Initialize the whole thing */
     init: function() {
-        console.log("In init");
         uniqueKey = new Date().getTime();
         if (localStore.participant_id === " " || !localStore.participant_id) {app.renderQuestion(-NUMSETUPQS);}
         else {
@@ -588,7 +565,7 @@ var app = {
 
     sampleParticipant: function() {
 
-        console.log("We are in SampleParticipant\n " + localStore.uniqueKey + " / " + uniqueKey);
+        //console.log("We are in SampleParticipant\n " + localStore.uniqueKey + " / " + uniqueKey);
         var current_moment = new Date();
         var current_time = current_moment.getTime();
         if ((current_time - localStore.pause_time) > 600000 || localStore.snoozed == 1) {
@@ -643,7 +620,7 @@ var app = {
                 localStore.pause_time = pause_time;
             },
             error: function (request, error) {
-                console.log("saving data failed with following error:");
+                console.log("Saving data failed with following error:");
                 console.log(error);
                 console.log(request);
             }
@@ -661,9 +638,6 @@ var app = {
         delete localStore.pause_time;
         */
 
-        console.log("and inside save data the arra looks liek this");
-        console.log(localStore);
-
         $.ajax({
             type: 'get',
             url: 'https://script.google.com/macros/s/AKfycbzorRQG-JNAkC9JjYqT3pEwYPIo3ocTdC5zzom9OQpbVSmX_30N/exec',
@@ -680,7 +654,7 @@ var app = {
                 $("#question").html("<h3>Your responses have been recorded. Thank you! </h3>");
             },
             error: function (request, error) {
-                console.log("saving data failed with following error:");
+                console.log("Saving data failed with following error:");
                 console.log(error);
                 $("#question").html("<h3>Please try resending data. If problems persist, please contact the researchers.</h3><br><button>Resend data</button>");
                 $("#question button").click(function () {app.saveDataLastPage();});
@@ -738,15 +712,8 @@ var app = {
             localStore[localStore.participant_id + "_" + 'notification_' + i + '_2'] = localStore.participant_id + "_" + b + "_" + date2;
             localStore[localStore.participant_id + "_" + 'notification_' + i + '_3'] = localStore.participant_id + "_" + c + "_" + date3;
             localStore[localStore.participant_id + "_" + 'notification_' + i + '_4'] = localStore.participant_id + "_" + d + "_" + date4;
-            console.log("adding to localstore " + i + " should be" );
-            console.log("[" + localStore.participant_id + "_" + 'notification_' + i + '_1' + "]");
-            console.log ("  =  ");
-            console.log (localStore.participant_id + "_" + c + "_" + date3);
-            console.log();
-            console.log(localStore)
+
         }
-        console.log("and at the very bottom of schedulenotifs localstore looks like this: ");
-        console.log( localStore);
     },
 
     snoozeNotif:function() {
