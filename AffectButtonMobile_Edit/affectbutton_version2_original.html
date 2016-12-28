@@ -51,26 +51,23 @@ You can configure it to react on dragging (for touch-based devices), but then yo
 
 
 	<div data-role="header">
-		<h2>Find the most suitable facial<br> expression for your current state:</h2>
+		<h2>Find the most suitable <br> facial expression for <br> your current state:</h2>
 	</div>
 
 
 	<div data-role="content" style="max-width:600px; margin:0 auto;">
 		<div style="width:300px; padding-left: 0; padding-right: 0; margin-left: auto; margin-right: auto; display: block;">
-
 			<canvas id="affect" width="300px" height="300px" style="border:0; padding:0;"></canvas>
-
 			<!-- <a href="#" data-role="button" onclick="$('#affect').affectbutton('reset');">Reset</a>
             <a href="#" data-role="button" onclick="alert('Confirm?');">Confirm</a> -->
 
 			<div data-role="fieldcontain">
-				<!--<label for="pleasure">pleased</label>-->
-				<input id="pleasure" type="hidden" value="0" min="-1" max="1" step="0.05" size="4" /> <!-- type="number" -->
-				<!--<label for="arousal">alert</label>-->
-				<input id="arousal" type="hidden" value="0" min="-1" max="1" step="0.05" />
-				<!--<label for="dominance">in control</label>-->
-				<input id="dominance" type="hidden" value="0" min="-1" max="1" step="0.05" />
+                <style>input{display:none; visibility: hidden}</style>
+				<!--<label for="pleasure">pleased</label>--><input id="pleasure" type="number" value="0" min="-1" max="1" step="0.05" size="4" />
+				<!--<label for="arousal">alert</label>--><input id="arousal" type="number" value="0" min="-1" max="1" step="0.05" />
+				<!--<label for="dominance">in control</label>--><input id="dominance" type="number" value="0" min="-1" max="1" step="0.05" />
 			</div>
+
 		</div>
 	</div> <!--  /content -->
 </div> <!-- /page -->
