@@ -65,7 +65,7 @@ var surveyQuestions = [
         "variableName": "Q2_generalInstructions",
         "questionPrompt": "On the following screens, we will be asking you questions about your emotional experiences within the last 30 minutes."
     },
-    /*2*/
+    /*Old #2 :
     {
         "type": "slider",
         "variableName": "Q3_thermometerValence",
@@ -76,32 +76,63 @@ var surveyQuestions = [
                           "<p>You can give your answer by moving the slider up or down, and you can see the value to the right of the slider.</p>",
         "minResponse": 0,
         "maxResponse": 100
+    },*/
+    {
+        "type": "multImg",
+        "variableName": "Q3_Valence",
+        "questionPrompt": "<p style='color:lightgoldenrodyellow;'> Please indicate how you are feeling, from extremely unpleasant to extremely pleasant:</p>",
+        "minResponse": 1,
+        "maxResponse": 9,
+        "srcs": [
+            {"src": "./img/SAM/V1.png"}, // Self-Assessment Manikin for Valence.
+            {"src": "./img/SAM/V2.png"},
+            {"src": "./img/SAM/V3.png"},
+            {"src": "./img/SAM/V4.png"},
+            {"src": "./img/SAM/V5.png"},
+            {"src": "./img/SAM/V6.png"},
+            {"src": "./img/SAM/V7.png"},
+            {"src": "./img/SAM/V8.png"},
+            {"src": "./img/SAM/V9.png"}
+        ]
     },
     /*3*/
     {
-        "type": "slider",
-        "variableName": "Q4_thermometerArousal",
-        "questionPrompt": "<p>Please indicate how you are feeling at the moment, where:</p>" +
-                          "<p>100 = extremely alert/agitated;</p>" +
-                          "<p>50 = neutral;</p>" +
-                          "<p>0 = extremely relaxed/bored/sleepy.</p>" +
-                          "<p>You can give your answer by moving the slider up or down, and you can see the value to the right of the slider.</p>",
-        "minResponse": 0,
-        "maxResponse": 100
+        "type": "multImg",
+        "variableName": "Q4_Arousal",
+        "questionPrompt": "<p style='color:yellowgreen;'> Please indicate how you are feeling, from extremely relaxed/bored/sleepy to extremely alert/agitated:</p>",  // Extremely relaxed/bored/sleepy | Neutral | Extremely alert/agitated.
+        "minResponse": 1,
+        "maxResponse": 9,
+        "srcs": [
+            {"src": "./img/SAM/A1.png"}, // Self-Assessment Manikin for Arousal.
+            {"src": "./img/SAM/A2.png"},
+            {"src": "./img/SAM/A3.png"},
+            {"src": "./img/SAM/A4.png"},
+            {"src": "./img/SAM/A5.png"},
+            {"src": "./img/SAM/A6.png"},
+            {"src": "./img/SAM/A7.png"},
+            {"src": "./img/SAM/A8.png"},
+            {"src": "./img/SAM/A9.png"}
+        ]
     },
     /*4*/
     {
-        "type": "slider",
-        "variableName": "Q5_thermometerDominance",
-        "questionPrompt": "<p>Please indicate how you are feeling at the moment, where:</p>" +
-                          "<p>100 = extremely in control of the situation;</p>" +
-                          "<p>50 = neither in control, nor overwhelmed;</p>" +
-                          "<p>0 = completely overwhelmed by the situation.</p>" +
-                          "<p>You can give your answer by moving the slider up or down, and you can see the value to the right of the slider.</p>",
-        "minResponse": 0,
-        "maxResponse": 100
+        "type": "multImg",
+        "variableName": "Q5_Dominance",
+        "questionPrompt": "<p style='color:lightpink;'> Please indicate how you are feeling, from extremely overwhelmed to extremely in control:</p>",  //Completely overwhelmed by the situation. | Neither overwhelmed, nor in control | Extremely in control of the situation.
+        "minResponse": 1,
+        "maxResponse": 9,
+        "srcs": [
+            {"src": "./img/SAM/D1.png"}, // Self-Assessment Manikin for Dominance.
+            {"src": "./img/SAM/D2.png"},
+            {"src": "./img/SAM/D3.png"},
+            {"src": "./img/SAM/D4.png"},
+            {"src": "./img/SAM/D5.png"},
+            {"src": "./img/SAM/D6.png"},
+            {"src": "./img/SAM/D7.png"},
+            {"src": "./img/SAM/D8.png"},
+            {"src": "./img/SAM/D9.png"}
+        ]
     },
-
     /*5*/
     {
         "type": "face",
@@ -179,9 +210,11 @@ var SNOOZEQ = 0;
 
 var questionTmpl = "<p>{{{questionText}}}</p><ul>{{{buttons}}}</ul>";
 
-var questionTextTmpl = "{{questionPrompt}}";
+var questionTextTmpl = "{{{questionPrompt}}}"; // All variables are HTML escaped by default. If you want to return unescaped HTML, use the triple mustache: {{{name}}}, which allows to execute html code for instance.
 
-var buttonTmpl = "<li><button id='{{id}}' value='{{value}}'>{{label}}</button></li>";
+var buttonTmpl = "<li><button id='{{id}}' value='{{value}}'>{{{label}}}</button></li>";
+
+var imageButtonTmpl = "<li><button  id='{{id}}' value='{{value}}' style='background: url({{{src}}}); height:60px; width:60px; background-size: 100%' /></li>";
 
 var textTmpl = "<li><textarea cols=50 rows=5 id='{{id}}'></textarea></li><li><button type='submit' value='Enter'>Enter</button></li>";
 
@@ -199,15 +232,7 @@ var timePickerTmpl = '<li><input id="{{id}}" data-format="HH:mm" data-template="
 
 var lastPageTmpl = "<h3>{{message}}</h3>";
 
-var affectButtonTmpl = "<style>html, body, iframe{margin: 0; border: 0; padding: 0; display: block; width: 100vw; height: 100vh;}</style><li><div id='{{id}}' > <iframe id='AffectButton' src='https://rawgit.com/CaterinaC/Android_App/master/AffectButtonMobile_Edit/affectbutton_version2_original.html'></iframe> </div></li><li><button type='submit' value='Enter'>Enter</button></li>";
-/* document.write('' +
- '<style>html, body, iframe{margin: 0; border: 0; padding: 0; display: block; width: 100vw; height: 100vh;}</style>' +
- '<script type="text/javascript"> function closeIframe() {var iframe = document.getElementById("AffectButton");' +
- 'iframe.parentNode.removeChild(document.getElementById("AffectButton"));' +
- '}</script>' +
- '<input class=question name="Close" type="button" value="Close" onClick="closeIframe()"/>' +
- '<iframe id="AffectButton" src="https://rawgit.com/CaterinaC/Android_App/master/AffectButtonMobile_Edit/affectbutton_version2_original.html"></iframe>');
- */
+var affectButtonTmpl = "<style>html, body, iframe{margin: 0; border: 0; padding: 0; display: block; width: 100vw; height: 90vh;}</style><li><div id='{{id}}' > <iframe id='AffectButton' src='https://rawgit.com/CaterinaC/Android_App/master/AffectButtonMobile_Edit/affectbutton_version2_original.html'></iframe> </div></li><li><button type='submit' value='Enter'>Enter</button></li>";
 
 
 var uniqueKey;
@@ -248,7 +273,7 @@ var app = {
         }
 
         questionPrompt = question.questionPrompt;
-        question.questionText = Mustache.render(eval(questionTextTmpl), {questionPrompt: questionPrompt});
+        question.questionText = Mustache.render(questionTextTmpl, {questionPrompt: questionPrompt});
 
         //Now populate the view for this question, depending on what the question type is
         switch (question.type) {
@@ -262,6 +287,23 @@ var app = {
                         id: question.variableName+i,
                         value: i,
                         label: label
+                    });
+                }
+                $("#question").html(Mustache.render(questionTmpl, question)).fadeIn(400);
+                $("#question ul li button").click(function(){
+                    app.recordResponse(this, question_index, question.type);
+                });
+                break;
+
+            case 'multImg': // multiple buttons with images
+                question.buttons = "";
+                var src_count = 0;
+                for (var i = question.minResponse; i <= question.maxResponse; i++) {
+                    var src = question.srcs[src_count++].src;
+                    question.buttons += Mustache.render(imageButtonTmpl, {
+                        id: question.variableName+i,
+                        value: i,
+                        src: src
                     });
                 }
                 $("#question").html(Mustache.render(questionTmpl, question)).fadeIn(400);
@@ -445,6 +487,12 @@ var app = {
             //Create a unique identifier for this response
             currentQuestion = button.id.slice(0,-1);
         }
+        //Record value of clicked button
+        else if (type == 'multImg') {
+            response = button.value;
+            //Create a unique identifier for this response
+            currentQuestion = button.id.slice(0,-1);
+        }
         else if (type == 'mult2') {
             response = button.value;
             //Create a unique identifier for this response
@@ -500,34 +548,6 @@ var app = {
         else if (count == SNOOZEQ && response == 0) {
             app.renderLastPage(lastPage[1], count);
         } // "That's cool, I'll notify you again in 10mins"
-
-
-
-        /* updated version of face in terms of how it looks etc.
-                   <style>html, body, iframe{margin: 0; border: 0; padding: 0; display: block; width: 100vw; height: 100vh;}</style>
-
-         <script type="text/javascript">function closeIframe() {
-         document.getElementById('AffectButton').parentNode.removeChild(document.getElementById('AffectButton'));
-         document.getElementById('CloseButton').parentNode.removeChild(document.getElementById('CloseButton'));
-         document.write("<h1>Hello World!</h1><p>Have a nice day!</p> You have also deleted the iframe!");
-         }</script>
-
-
-         <iframe id="AffectButton" src="https://rawgit.com/CaterinaC/Android_App/master/AffectButtonMobile_Edit/affectbutton_version2_original.html"></iframe>
-
-         <style>button{position: relative;
-         width: 50vw; height: 10vh;
-         font-size:20px;
-         font-weight:700;
-         border: 0;
-         color: white;
-         display: table;
-         background: blue;
-         margin: 0 auto;}</style>
-
-         <button class="button" id="CloseButton" name="Close" type="button" value="Close" onClick="closeIframe()">Close</button>
-         */
-
 
         else if (count == 7 && response == 0) {
             $("#question").fadeOut(400, function () {$("#question").html("");app.renderQuestion(9);});
