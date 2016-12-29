@@ -80,7 +80,8 @@ var surveyQuestions = [
     {
         "type": "multImg",
         "variableName": "Q3_Valence",
-        "questionPrompt": "<p style='color:lightgoldenrodyellow;'> Please indicate how you are feeling, from extremely unpleasant to extremely pleasant:</p>",
+        "questionPrompt": "<p style='color:deeppink; text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;'> " +
+        "Please indicate how you are feeling. Scroll to see all 9 buttons below:</p>",
         "minResponse": 1,
         "maxResponse": 9,
         "srcs": [
@@ -93,13 +94,25 @@ var surveyQuestions = [
             {"src": "./img/SAM/V7.png"},
             {"src": "./img/SAM/V8.png"},
             {"src": "./img/SAM/V9.png"}
+        ],
+        "myTexts": [
+            {"myText": "Extremely unpleasant."},
+            {"myText": ""},
+            {"myText": ""},
+            {"myText": ""},
+            {"myText": "Neither unpleasant, <br> nor pleasant."},
+            {"myText": ""},
+            {"myText": ""},
+            {"myText": ""},
+            {"myText": "Extremely pleasant."}
         ]
     },
     /*3*/
     {
         "type": "multImg",
         "variableName": "Q4_Arousal",
-        "questionPrompt": "<p style='color:yellowgreen;'> Please indicate how you are feeling, from extremely relaxed/bored/sleepy to extremely alert/agitated:</p>",  // Extremely relaxed/bored/sleepy | Neutral | Extremely alert/agitated.
+        "questionPrompt": "<p style='color:palegreen; text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;'> " +
+        "Please indicate how you are feeling. Scroll to see all 9 buttons below:</p>",  // Extremely relaxed/bored/sleepy | Neutral | Extremely alert/agitated.
         "minResponse": 1,
         "maxResponse": 9,
         "srcs": [
@@ -112,13 +125,25 @@ var surveyQuestions = [
             {"src": "./img/SAM/A7.png"},
             {"src": "./img/SAM/A8.png"},
             {"src": "./img/SAM/A9.png"}
+        ],
+        "myTexts": [
+            {"myText": "Extremely relaxed/<br>bored/sleepy."},
+            {"myText": ""},
+            {"myText": ""},
+            {"myText": ""},
+            {"myText": "Neutral."},
+            {"myText": ""},
+            {"myText": ""},
+            {"myText": ""},
+            {"myText": "Extremely alert/<br>agitated."}
         ]
     },
     /*4*/
     {
         "type": "multImg",
         "variableName": "Q5_Dominance",
-        "questionPrompt": "<p style='color:lightpink;'> Please indicate how you are feeling, from extremely overwhelmed to extremely in control:</p>",  //Completely overwhelmed by the situation. | Neither overwhelmed, nor in control | Extremely in control of the situation.
+        "questionPrompt": "<p style='color:darkorange; text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;'> " +
+        "Please indicate how you are feeling. Scroll to see all 9 buttons below:</p>",  //Completely overwhelmed by the situation. | Neither overwhelmed, nor in control | Extremely in control of the situation.
         "minResponse": 1,
         "maxResponse": 9,
         "srcs": [
@@ -131,6 +156,17 @@ var surveyQuestions = [
             {"src": "./img/SAM/D7.png"},
             {"src": "./img/SAM/D8.png"},
             {"src": "./img/SAM/D9.png"}
+        ],
+        "myTexts": [
+            {"myText": "Extremely overwhelmed <br> by the situation."},
+            {"myText": ""},
+            {"myText": ""},
+            {"myText": ""},
+            {"myText": "Neither overwhelmed, <br> nor in control."},
+            {"myText": ""},
+            {"myText": ""},
+            {"myText": ""},
+            {"myText": "Extremely in control <br> of the situation."}
         ]
     },
     /*5*/
@@ -214,7 +250,14 @@ var questionTextTmpl = "{{{questionPrompt}}}"; // All variables are HTML escaped
 
 var buttonTmpl = "<li><button id='{{id}}' value='{{value}}'>{{{label}}}</button></li>";
 
-var imageButtonTmpl = "<li><button  id='{{id}}' value='{{value}}' style='background: url({{{src}}}); height:60px; width:60px; background-size: 100%' /></li>";
+var imageButtonTmpl = "" +
+    "<li>" +
+    "<div style='position: absolute; left:40px; top: calc(110px * {{value}}); '>" +
+    "<button id='{{id}}' value='{{value}}' style='position: absolute; background:url({{{src}}}); height:100px; width:100px; background-size: 100%;'/>" +
+    "<span style='left: 130px; top: 35px; position: relative'>{{{myText}}}</span>" +
+    "</div>" +
+    "</li>";
+
 
 var textTmpl = "<li><textarea cols=50 rows=5 id='{{id}}'></textarea></li><li><button type='submit' value='Enter'>Enter</button></li>";
 
@@ -222,7 +265,9 @@ var checkListTmpl = "<li><input type='checkbox' id='{{id}}' value='{{value}}'>{{
 
 var instructionTmpl = "<li><button id='{{id}}' value = 'Next'>Next</button></li>";
 
-var sliderTmpl = "<li><input type='range' min='{{min}}' max='{{max}}' value='{{value}}' orient=vertical id='{{id}}' oninput='outputUpdate(value)'></input><output for='{{id}}' id='slider'>50</output><script>function outputUpdate(slidervalue){document.querySelector('#slider').value=slidervalue;}</script></li><li><button type='submit' value='Enter'>Enter</button></li>";
+// var sliderTmpl = "<li><input type='range' min='{{min}}' max='{{max}}' value='{{value}}' orient=vertical id='{{id}}' oninput='outputUpdate(value)'></input><output for='{{id}}' id='slider'>50</output><script>function outputUpdate(slidervalue){document.querySelector('#slider').value=slidervalue;}</script></li><li><button type='submit' value='Enter'>Enter</button></li>";
+
+var sliderTmpl = "<li><input type='range' min='{{min}}' max='{{max}}' value='{{value}}' id='{{id}}' oninput='outputUpdate(value)'/><output for='{{id}}' id='slider'>50</output><script>function outputUpdate(slidervalue){document.querySelector('#slider').value=slidervalue;}</script></li><li><button type='submit' value='Enter'>Enter</button></li>";
 
 var datePickerTmpl = '<li><input id="{{id}}" data-format="DD-MM-YYYY" data-template="D MMM YYYY" name="date"><br /><br /></li><li><button type="submit" value="Enter">Enter</button></li><script>$(function(){$("input").combodate({firstItem: "name",minYear:2015, maxYear:2016});});</script>';
 
@@ -232,7 +277,12 @@ var timePickerTmpl = '<li><input id="{{id}}" data-format="HH:mm" data-template="
 
 var lastPageTmpl = "<h3>{{message}}</h3>";
 
-var affectButtonTmpl = "<style>html, body, iframe{margin: 0; border: 0; padding: 0; display: block; width: 100vw; height: 90vh;}</style><li><div id='{{id}}' > <iframe id='AffectButton' src='https://rawgit.com/CaterinaC/Android_App/master/AffectButtonMobile_Edit/affectbutton_version2_original.html'></iframe> </div></li><li><button type='submit' value='Enter'>Enter</button></li>";
+var affectButtonTmpl = "" +
+    "<style>html, body, iframe{margin: 0; border: 0; padding: 0; display: block; width: 100vw; height: 90vh;}</style>" +
+    "<li><div id='{{id}}'>" +
+    "<iframe id='AffectButton' src='https://rawgit.com/CaterinaC/Android_App/master/AffectButtonMobile_Edit/affectbutton_version2_original.html'></iframe>" +
+    "</div></li>" +
+    "<li><button type='submit' value='Enter'>Enter</button></li>";
 
 
 var uniqueKey;
@@ -298,12 +348,15 @@ var app = {
             case 'multImg': // multiple buttons with images
                 question.buttons = "";
                 var src_count = 0;
+                var myText_count = 0;
                 for (var i = question.minResponse; i <= question.maxResponse; i++) {
                     var src = question.srcs[src_count++].src;
+                    var myText = question.myTexts[myText_count++].myText;
                     question.buttons += Mustache.render(imageButtonTmpl, {
                         id: question.variableName+i,
                         value: i,
-                        src: src
+                        src: src,
+                        myText: myText
                     });
                 }
                 $("#question").html(Mustache.render(questionTmpl, question)).fadeIn(400);
