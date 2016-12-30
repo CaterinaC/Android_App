@@ -80,8 +80,7 @@ var surveyQuestions = [
     {
         "type": "multImg",
         "variableName": "Q3_Valence",
-        "questionPrompt": "<p style='color:deeppink; text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;'> " +
-        "Please indicate how you are feeling. Scroll to see all 9 buttons below:</p>",
+        "questionPrompt": "<p>Please indicate how you are feeling. Scroll to see all 9 buttons below:</p>",
         "minResponse": 1,
         "maxResponse": 9,
         "srcs": [
@@ -96,23 +95,25 @@ var surveyQuestions = [
             {"src": "./img/SAM/V9.png"}
         ],
         "myTexts": [
-            {"myText": "Extremely unpleasant."},
+            {"myText": "<span style='color:deeppink; text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;'>" +
+            "Extremely unpleasant.</span>"},
             {"myText": ""},
             {"myText": ""},
             {"myText": ""},
-            {"myText": "Neither unpleasant, <br> nor pleasant."},
+            {"myText": "<span style='color:deeppink; text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;'>" +
+            "Neither unpleasant, <br> nor pleasant.</span>"},
             {"myText": ""},
             {"myText": ""},
             {"myText": ""},
-            {"myText": "Extremely pleasant."}
+            {"myText": "<span style='color:deeppink; text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;'>" +
+            "Extremely pleasant.</span>"}
         ]
     },
     /*3*/
     {
         "type": "multImg",
         "variableName": "Q4_Arousal",
-        "questionPrompt": "<p style='color:palegreen; text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;'> " +
-        "Please indicate how you are feeling. Scroll to see all 9 buttons below:</p>",  // Extremely relaxed/bored/sleepy | Neutral | Extremely alert/agitated.
+        "questionPrompt": "<p>Please indicate how you are feeling. Scroll to see all 9 buttons below:</p>",
         "minResponse": 1,
         "maxResponse": 9,
         "srcs": [
@@ -127,23 +128,25 @@ var surveyQuestions = [
             {"src": "./img/SAM/A9.png"}
         ],
         "myTexts": [
-            {"myText": "Extremely relaxed/<br>bored/sleepy."},
+            {"myText": "<span style='color:palegreen; text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;'>" +
+            "Extremely relaxed /<br>bored / sleepy.</span>"},
             {"myText": ""},
             {"myText": ""},
             {"myText": ""},
-            {"myText": "Neutral."},
+            {"myText": "<span style='color:palegreen; text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;'>" +
+            "Neutral.</span>"},
             {"myText": ""},
             {"myText": ""},
             {"myText": ""},
-            {"myText": "Extremely alert/<br>agitated."}
+            {"myText": "<span style='color:palegreen; text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;'>" +
+            "Extremely alert /<br>agitated.</span>"}
         ]
     },
     /*4*/
     {
         "type": "multImg",
         "variableName": "Q5_Dominance",
-        "questionPrompt": "<p style='color:darkorange; text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;'> " +
-        "Please indicate how you are feeling. Scroll to see all 9 buttons below:</p>",  //Completely overwhelmed by the situation. | Neither overwhelmed, nor in control | Extremely in control of the situation.
+        "questionPrompt": "<p>Please indicate how you are feeling. Scroll to see all 9 buttons below:</p>",
         "minResponse": 1,
         "maxResponse": 9,
         "srcs": [
@@ -158,15 +161,18 @@ var surveyQuestions = [
             {"src": "./img/SAM/D9.png"}
         ],
         "myTexts": [
-            {"myText": "Extremely overwhelmed <br> by the situation."},
+            {"myText": "<span style='color:darkorange; text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;'>" +
+            "Extremely overwhelmed <br> by the situation.</span>"},
             {"myText": ""},
             {"myText": ""},
             {"myText": ""},
-            {"myText": "Neither overwhelmed, <br> nor in control."},
+            {"myText": "<span style='color:darkorange; text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;'>" +
+            "Neither overwhelmed, <br> nor in control.</span>"},
             {"myText": ""},
             {"myText": ""},
             {"myText": ""},
-            {"myText": "Extremely in control <br> of the situation."}
+            {"myText": "<span style='color:darkorange; text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;'>" +
+            "Extremely in control <br> of the situation.</span>"}
         ]
     },
     /*5*/
@@ -252,9 +258,9 @@ var buttonTmpl = "<li><button id='{{id}}' value='{{value}}'>{{{label}}}</button>
 
 var imageButtonTmpl = "" +
     "<li>" +
-    "<div style='position: absolute; left:40px; top: calc(110px * {{value}}); '>" +
+    "<div style='position: absolute; left:40px; top: calc(105px * {{value}}); '>" + // Just slightly more than the 100 x 100 buttons themselves
     "<button id='{{id}}' value='{{value}}' style='position: absolute; background:url({{{src}}}); height:100px; width:100px; background-size: 100%;'/>" +
-    "<span style='left: 130px; top: 35px; position: relative'>{{{myText}}}</span>" +
+    "<span style='left: 130px; top: 35px; position: relative;'>{{{myText}}}</span>" +
     "</div>" +
     "</li>";
 
