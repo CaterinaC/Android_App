@@ -63,7 +63,16 @@ var surveyQuestions = [
     {
         "type": "instructions",
         "variableName": "Q2_generalInstructions",
-        "questionPrompt": "On the following screens, we will be asking you questions about your emotional experiences within the last 30 minutes."
+        "questionPrompt": "" +
+        "<br>" +
+        "<p>Hi there!</p>" +
+        "<br>" +
+        "<p> On the following screens, we will be asking you questions about your emotional experiences within the last 30 minutes.</p>" +
+        "<br>" +
+        "<p>Press NEXT to rate how you are currently feeling.</p>" +
+        "<br>" +
+        "<p>Please note that you should scroll down to see all the buttons listed!</p>" +
+        "<br>"
     },
     /*Old #2 :
     {
@@ -80,7 +89,7 @@ var surveyQuestions = [
     {
         "type": "multImg",
         "variableName": "Q3_Valence",
-        "questionPrompt": "<p>Please indicate how you are feeling. Scroll to see all 9 buttons below:</p>",
+        "questionPrompt": "",
         "minResponse": 1,
         "maxResponse": 9,
         "srcs": [
@@ -95,25 +104,31 @@ var surveyQuestions = [
             {"src": "./img/SAM/V9.png"}
         ],
         "myTexts": [
-            {"myText": "<span style='color:deeppink; text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;'>" +
-            "Extremely unpleasant.</span>"},
-            {"myText": ""},
-            {"myText": ""},
-            {"myText": ""},
-            {"myText": "<span style='color:deeppink; text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;'>" +
-            "Neither unpleasant, <br> nor pleasant.</span>"},
-            {"myText": ""},
-            {"myText": ""},
-            {"myText": ""},
-            {"myText": "<span style='color:deeppink; text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;'>" +
-            "Extremely pleasant.</span>"}
+            {"myText": "<span style='color:#ff66b3; text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;'>" +
+            "1. Extremely unpleasant.</span>"},
+            {"myText": "<span style='color:#ff66b3; text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;'>" +
+            "2.</span>"},
+            {"myText": "<span style='color:#ff66b3; text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;'>" +
+            "3.</span>"},
+            {"myText": "<span style='color:#ff66b3; text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;'>" +
+            "4.</span>"},
+            {"myText": "<span style='color:#ff66b3; text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;'>" +
+            "5. Neither unpleasant, <br> nor pleasant.</span>"},
+            {"myText": "<span style='color:#ff66b3; text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;'>" +
+            "6.</span>"},
+            {"myText": "<span style='color:#ff66b3; text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;'>" +
+            "7.</span>"},
+            {"myText": "<span style='color:#ff66b3; text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;'>" +
+            "8.</span>"},
+            {"myText": "<span style='color:#ff66b3; text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;'>" +
+            "9. Extremely pleasant.</span>"}
         ]
     },
     /*3*/
     {
         "type": "multImg",
         "variableName": "Q4_Arousal",
-        "questionPrompt": "<p>Please indicate how you are feeling. Scroll to see all 9 buttons below:</p>",
+        "questionPrompt": "",
         "minResponse": 1,
         "maxResponse": 9,
         "srcs": [
@@ -128,25 +143,31 @@ var surveyQuestions = [
             {"src": "./img/SAM/A9.png"}
         ],
         "myTexts": [
-            {"myText": "<span style='color:palegreen; text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;'>" +
-            "Extremely relaxed /<br>bored / sleepy.</span>"},
-            {"myText": ""},
-            {"myText": ""},
-            {"myText": ""},
-            {"myText": "<span style='color:palegreen; text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;'>" +
-            "Neutral.</span>"},
-            {"myText": ""},
-            {"myText": ""},
-            {"myText": ""},
-            {"myText": "<span style='color:palegreen; text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;'>" +
-            "Extremely alert /<br>agitated.</span>"}
+            {"myText": "<span style='color:#1aff1a; text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;'>" +
+            "1. Extremely relaxed /<br>bored / sleepy.</span>"},
+            {"myText": "<span style='color:#1aff1a; text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;'>" +
+            "2.</span>"},
+            {"myText": "<span style='color:#1aff1a; text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;'>" +
+            "3.</span>"},
+            {"myText": "<span style='color:#1aff1a; text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;'>" +
+            "4.</span>"},
+            {"myText": "<span style='color:#1aff1a; text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;'>" +
+            "5. Neutral.</span>"},
+            {"myText": "<span style='color:#1aff1a; text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;'>" +
+            "6.</span>"},
+            {"myText": "<span style='color:#1aff1a; text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;'>" +
+            "7.</span>"},
+            {"myText": "<span style='color:#1aff1a; text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;'>" +
+            "8.</span>"},
+            {"myText": "<span style='color:#1aff1a; text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;'>" +
+            "9. Extremely alert /<br>agitated.</span>"}
         ]
     },
     /*4*/
     {
         "type": "multImg",
         "variableName": "Q5_Dominance",
-        "questionPrompt": "<p>Please indicate how you are feeling. Scroll to see all 9 buttons below:</p>",
+        "questionPrompt": "",
         "minResponse": 1,
         "maxResponse": 9,
         "srcs": [
@@ -161,18 +182,24 @@ var surveyQuestions = [
             {"src": "./img/SAM/D9.png"}
         ],
         "myTexts": [
-            {"myText": "<span style='color:darkorange; text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;'>" +
-            "Extremely overwhelmed <br> by the situation.</span>"},
-            {"myText": ""},
-            {"myText": ""},
-            {"myText": ""},
-            {"myText": "<span style='color:darkorange; text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;'>" +
-            "Neither overwhelmed, <br> nor in control.</span>"},
-            {"myText": ""},
-            {"myText": ""},
-            {"myText": ""},
-            {"myText": "<span style='color:darkorange; text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;'>" +
-            "Extremely in control <br> of the situation.</span>"}
+            {"myText": "<span style='color:orange; text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;'>" +
+            "1. Extremely overwhelmed <br> by the situation.</span>"},
+            {"myText": "<span style='color:orange; text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;'>" +
+            "2.</span>"},
+            {"myText": "<span style='color:orange; text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;'>" +
+            "3.</span>"},
+            {"myText": "<span style='color:orange; text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;'>" +
+            "4.</span>"},
+            {"myText": "<span style='color:orange; text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;'>" +
+            "5. Neither overwhelmed, <br> nor in control.</span>"},
+            {"myText": "<span style='color:orange; text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;'>" +
+            "6.</span>"},
+            {"myText": "<span style='color:orange; text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;'>" +
+            "7.</span>"},
+            {"myText": "<span style='color:orange; text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;'>" +
+            "8.</span>"},
+            {"myText": "<span style='color:orange; text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;'>" +
+            "9. Extremely in control <br> of the situation.</span>"}
         ]
     },
     /*5*/
@@ -258,7 +285,7 @@ var buttonTmpl = "<li><button id='{{id}}' value='{{value}}'>{{{label}}}</button>
 
 var imageButtonTmpl = "" +
     "<li>" +
-    "<div style='position: absolute; left:40px; top: calc(105px * {{value}}); '>" + // Just slightly more than the 100 x 100 buttons themselves
+    "<div style='position: absolute; left:40px; top: calc(10px + 105px * ({{value}} - 1)); '>" + // Just slightly more than the 100 x 100 buttons themselves
     "<button id='{{id}}' value='{{value}}' style='position: absolute; background:url({{{src}}}); height:100px; width:100px; background-size: 100%;'/>" +
     "<span style='left: 130px; top: 35px; position: relative;'>{{{myText}}}</span>" +
     "</div>" +
@@ -270,8 +297,6 @@ var textTmpl = "<li><textarea cols=50 rows=5 id='{{id}}'></textarea></li><li><bu
 var checkListTmpl = "<li><input type='checkbox' id='{{id}}' value='{{value}}'>{{label}}</input></li>";
 
 var instructionTmpl = "<li><button id='{{id}}' value = 'Next'>Next</button></li>";
-
-// var sliderTmpl = "<li><input type='range' min='{{min}}' max='{{max}}' value='{{value}}' orient=vertical id='{{id}}' oninput='outputUpdate(value)'></input><output for='{{id}}' id='slider'>50</output><script>function outputUpdate(slidervalue){document.querySelector('#slider').value=slidervalue;}</script></li><li><button type='submit' value='Enter'>Enter</button></li>";
 
 var sliderTmpl = "<li><input type='range' min='{{min}}' max='{{max}}' value='{{value}}' id='{{id}}' oninput='outputUpdate(value)'/><output for='{{id}}' id='slider'>50</output><script>function outputUpdate(slidervalue){document.querySelector('#slider').value=slidervalue;}</script></li><li><button type='submit' value='Enter'>Enter</button></li>";
 
@@ -730,7 +755,12 @@ var app = {
                 localStore.snoozed = snoozed;
                 localStore.uniqueKey = uniqueKey;
                 localStore.pause_time = pause_time;
-                $("#question").html("<h3>Your responses have been recorded. Thank you! </h3>");
+                $("#question").html("" +
+                    "<h3>" +
+                    "<p>Your responses have been recorded, so you can now close the app.</p>" +
+                    "<br>" +
+                    "<p>Thanks and see you later!</p>" +
+                    "</h3>");
             },
             error: function (request, error) {
                 console.log("Saving data failed with following error:");
