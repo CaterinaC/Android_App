@@ -42,7 +42,7 @@ var participantSetup = [
         "variableName": "participant_id",
         "questionPrompt": "<p>Please type in your participant ID as:</p>" +
                           "<p>Your initials + Year of birth + First letter from country of origin.</p>" +
-                          "<p align='left'>EXAMPLE: AF1990S, for Alex Farrell, born in 1990, in Scotland.</p>" // Align center is the default.
+                          "<p align='left'><u>EXAMPLE:</u> AF1990S, for Alex Farrell, born in 1990, in Scotland.</p>" // Align center is the default.
     }
 ];
 
@@ -71,7 +71,7 @@ var surveyQuestions = [
         "<br>" +
         "<p>Press NEXT to rate how you are currently feeling.</p>" +
         "<br>" +
-        "<p>Please note that you should scroll down to see all the buttons listed!</p>" +
+        "<p><u>Please note:</u> You should scroll down to see all the buttons listed!</p>" +
         "<br>"
     },
     /*Old #2 :
@@ -104,23 +104,23 @@ var surveyQuestions = [
             {"src": "./img/SAM/V9.png"}
         ],
         "myTexts": [
-            {"myText": "<span style='color:#ff66b3; text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;'>" +
+            {"myText": "<span style='color:pink; text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;'>" +
             "1. Extremely unpleasant.</span>"},
-            {"myText": "<span style='color:#ff66b3; text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;'>" +
+            {"myText": "<span style='color:pink; text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;'>" +
             "2.</span>"},
-            {"myText": "<span style='color:#ff66b3; text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;'>" +
+            {"myText": "<span style='color:pink; text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;'>" +
             "3.</span>"},
-            {"myText": "<span style='color:#ff66b3; text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;'>" +
+            {"myText": "<span style='color:pink; text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;'>" +
             "4.</span>"},
-            {"myText": "<span style='color:#ff66b3; text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;'>" +
+            {"myText": "<span style='color:pink; text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;'>" +
             "5. Neither unpleasant, <br> nor pleasant.</span>"},
-            {"myText": "<span style='color:#ff66b3; text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;'>" +
+            {"myText": "<span style='color:pink; text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;'>" +
             "6.</span>"},
-            {"myText": "<span style='color:#ff66b3; text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;'>" +
+            {"myText": "<span style='color:pink; text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;'>" +
             "7.</span>"},
-            {"myText": "<span style='color:#ff66b3; text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;'>" +
+            {"myText": "<span style='color:pink; text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;'>" +
             "8.</span>"},
-            {"myText": "<span style='color:#ff66b3; text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;'>" +
+            {"myText": "<span style='color:pink; text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;'>" +
             "9. Extremely pleasant.</span>"}
         ]
     },
