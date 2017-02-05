@@ -26,6 +26,10 @@
 
 /* activate localStorage */
 var localStore = window.localStorage;
+
+// this is teh short term store for user event categories
+var userDefinedCategories = [];
+
 /* surveyQuestion Model (This time, written in "JSON" format to interface more cleanly with Mustache) */
 
 var participantSetup = [
@@ -260,8 +264,17 @@ var surveyQuestions = [
             {"label": "Negative, but unexciting"},
             {"label": "Negative, but very intense"}
         ]
+    },
+    /* 10 */
+    // This question handles user submission of categories (userDefinedCategories)
+    {
+        "type": "userCategories",
+        "variableName": "Q11_userCategories",
+        "QuestionPrompt": "How would you classify the recent events?",
+        "SubmitNewPrompt": "Add New"
     }
 ];
+var lastQuestionIndex = 9;
 
 var lastPage = [
     {"message": "Thank you for completing this session's questions. Please wait while the data is sent to our servers..."},
@@ -315,6 +328,8 @@ var affectButtonTmpl = "" +
     "</div></li>" +
     "<li><button type='submit' value='Enter'>Enter</button></li>";
 
+// this is the html template for the userCategories question (userDefinedCategories)
+var userCategoriesTmpl = "";
 
 var uniqueKey;
 
@@ -339,6 +354,8 @@ var app = {
     //Beginning our app functions
     /* The first function is used to specify how the app should display the various questions. You should note which questions
      should be displayed using which formats before customizing this function*/
+
+
 
 
     renderQuestion: function(question_index) {
@@ -607,10 +624,20 @@ var app = {
             currentQuestion = "Q6_affectFace"; // Remember to edit Q6 here if necessary, as it is hard-coded.
         }
 
-        //save metadata vars to localstore for use maintaining state later
+        //save metadata vars to localstore for use maintaining state later  this is the logic to handle new users
         if (currentQuestion=="participant_id") {
             localStore.participant_id = response;
             localStore.uniqueKey = uniqueKey;
+
+            // shortly, this user's self-defined categories will be stored here
+            userDefinedCategories = new Array();
+            userDefinedCategories.push("frustration");
+
+
+        }else {
+            // this is where we load the user categories from the localStore and turn it back into an array
+            //userDefinedCategories = new Array(5);
+            userDefinedCategories = JSON.parse(localStore.getItem("userDefinedCategories"));
         }
 
         uniqueRecord = localStore.participant_id + "_" + uniqueKey + "_" + currentQuestion + "_" + year + "_" + month + "_" + day + "_" + hours + "_" + minutes + "_" + seconds;
@@ -640,7 +667,12 @@ var app = {
         else if (count == 7 && response == 1) {
             $("#question").fadeOut(400, function () {$("#question").html("");app.renderQuestion(8);});
         }
-        else if (count < surveyQuestions.length-1) {
+        /*
+         *  Was: else if (count < surveyQuestions.length-1) {
+         *  Changed to allow for additions near end of question array - without this one has to add new questions
+         *  earlier in the question array and rewire everything by hand.
+         */
+        else if (count < lastQuestionIndex) {
             $("#question").fadeOut(400, function () {$("#question").html("");app.renderQuestion(count+1);});
         }
         else  {
@@ -658,6 +690,7 @@ var app = {
     /* Initialize the whole thing */
     init: function() {
         uniqueKey = new Date().getTime();
+
         if (localStore.participant_id === " " || !localStore.participant_id) {app.renderQuestion(-NUMSETUPQS);}
         else {
             uniqueKey = new Date().getTime();
@@ -722,6 +755,7 @@ var app = {
                 localStore.snoozed = snoozed;
                 localStore.uniqueKey = uniqueKey;
                 localStore.pause_time = pause_time;
+;
             },
             error: function (request, error) {
                 console.log("Saving data failed with following error:");
@@ -729,6 +763,9 @@ var app = {
                 console.log(request);
             }
         });
+        console.log("save data 1");
+        // convert the array of user categories to a string for localStore
+        localStorage.setItem("userDefinedCategories", JSON.stringify(userDefinedCategories))
     },
 
     saveDataLastPage:function() {
@@ -769,6 +806,10 @@ var app = {
                 $("#question button").click(function () {app.saveDataLastPage();});
             }
         });
+
+        console.log("save data 2");
+        // convert the array of user categories to a string for localStore
+        localStorage.setItem("userDefinedCategories", JSON.stringify(userDefinedCategories))
     },
 
     scheduleNotifs:function() {
