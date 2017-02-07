@@ -270,11 +270,12 @@ var surveyQuestions = [
     {
         "type": "userCategories",
         "variableName": "Q11_userCategories",
-        "QuestionPrompt": "How would you classify the recent events?",
-        "SubmitNewPrompt": "Add New"
+        "questionPrompt": "How would you classify the recent events?",
+        "submitNewPrompt": "Add New"
     }
 ];
-var lastQuestionIndex = 9;
+// this int should point to the last question the user answers
+var lastQuestionIndex = 10;
 
 var lastPage = [
     {"message": "Thank you for completing this session's questions. Please wait while the data is sent to our servers..."},
@@ -328,8 +329,8 @@ var affectButtonTmpl = "" +
     "</div></li>" +
     "<li><button type='submit' value='Enter'>Enter</button></li>";
 
-// this is the html template for the userCategories question (userDefinedCategories)
-var userCategoriesTmpl = "";
+// this is the html template for the userCategories question (userDefinedCategories) // DF NOTE DELETE??
+//var userCategoriesTmpl = "";
 
 var uniqueKey;
 
@@ -530,6 +531,53 @@ var app = {
                     app.recordResponse($("face"), question_index, question.type);
                 });
                 break;
+
+            case 'userCategories': // List user categories + text entry for new ones
+
+                // this type of question is built from three mini components
+                // first we build a list of buttons from user defined categories
+                // then we add a free text entry box to the bottom of that list
+                // finally we wrap all of that up as a variable that we send to the "questionTmpl" which is
+                // in charge of building the actual page the user sees
+
+                // build buttons list
+                question.buttons = "";
+                 for (var i = 0; i < userDefinedCategories.length; i++) {
+                    var label = userDefinedCategories[i];
+                    question.buttons += Mustache.render(buttonTmpl, {
+                        id: question.variableName+i,
+                        value: label,
+                        label: label
+                    });
+                }
+
+                // add text box to bottom of button list
+                question.buttons += Mustache.render(textTmpl, {id: question.variableName+userDefinedCategories.length});
+
+                /*
+                 // text entry validation
+                 // two tasks to do
+                 // first - limit char size
+                 // second - make sure it doesn't fire when you submit one of the OTHER buttons (not text button)
+
+                 $("#question ul li button").click(function(){
+                    if (app.validateResponse($("textarea"))){
+                        app.recordResponse($("textarea"), question_index, question.type);
+                    }
+                    else {
+                        alert("Please enter something.");
+                    }
+                });
+                */
+
+
+                // build final question page
+                $("#question").html(Mustache.render(questionTmpl, question)).fadeIn(400);
+                $("#question ul li button").click(function(){
+                    app.recordResponse(this, question_index, question.type);
+                });
+
+                break;
         }
     },
 
@@ -625,7 +673,7 @@ var app = {
         }
 
         //save metadata vars to localstore for use maintaining state later  this is the logic to handle new users
-        if (currentQuestion=="participant_id") {
+        if (currentQuestion == "participant_id") {
             localStore.participant_id = response;
             localStore.uniqueKey = uniqueKey;
 
@@ -634,7 +682,7 @@ var app = {
             userDefinedCategories.push("frustration");
 
 
-        }else {
+        } else if (currentQuestion == "Q1_pressPlay"){
             // this is where we load the user categories from the localStore and turn it back into an array
             //userDefinedCategories = new Array(5);
             userDefinedCategories = JSON.parse(localStore.getItem("userDefinedCategories"));
@@ -661,11 +709,16 @@ var app = {
         } // "That's cool, I'll notify you again in 10mins"
 
         else if (count == 7 && response == 0) {
-            $("#question").fadeOut(400, function () {$("#question").html("");app.renderQuestion(9);});
+            // we now jump to Q 10 instead of Q9 cause of the new user category data page
+            $("#question").fadeOut(400, function () {$("#question").html("");app.renderQuestion(10);});
             localStore[localStore.participant_id + "_" + uniqueKey + "_Q9_numberOfParticipants_" + year + "_" + month + "_" + day + "_" + hours + "_" + minutes + "_" + seconds] = 'None';
         }
         else if (count == 7 && response == 1) {
             $("#question").fadeOut(400, function () {$("#question").html("");app.renderQuestion(8);});
+        }
+        // jump frm Q[8] to Q[10] because of new user defined categories screen
+        else if (count == 8) {
+            $("#question").fadeOut(400, function () {$("#question").html("");app.renderQuestion(10);});
         }
         /*
          *  Was: else if (count < surveyQuestions.length-1) {
@@ -755,7 +808,11 @@ var app = {
                 localStore.snoozed = snoozed;
                 localStore.uniqueKey = uniqueKey;
                 localStore.pause_time = pause_time;
-;
+
+
+                console.log("save data 1");
+                // convert the array of user categories to a string for localStore
+                localStore.setItem("userDefinedCategories", JSON.stringify(userDefinedCategories));
             },
             error: function (request, error) {
                 console.log("Saving data failed with following error:");
@@ -763,9 +820,6 @@ var app = {
                 console.log(request);
             }
         });
-        console.log("save data 1");
-        // convert the array of user categories to a string for localStore
-        localStorage.setItem("userDefinedCategories", JSON.stringify(userDefinedCategories))
     },
 
     saveDataLastPage:function() {
@@ -792,6 +846,11 @@ var app = {
                 localStore.snoozed = snoozed;
                 localStore.uniqueKey = uniqueKey;
                 localStore.pause_time = pause_time;
+
+                console.log("save data 2");
+                // convert the array of user categories to a string for localStore
+                localStore.setItem("userDefinedCategories", JSON.stringify(userDefinedCategories))
+
                 $("#question").html("" +
                     "<h3>" +
                     "<p>Your responses have been recorded, so you can now close the app.</p>" +
@@ -807,9 +866,7 @@ var app = {
             }
         });
 
-        console.log("save data 2");
-        // convert the array of user categories to a string for localStore
-        localStorage.setItem("userDefinedCategories", JSON.stringify(userDefinedCategories))
+
     },
 
     scheduleNotifs:function() {
