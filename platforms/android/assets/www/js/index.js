@@ -22,13 +22,10 @@
  SOFTWARE.
  */
 
-// All edits from original version have been made by and belong to Caterina Constantinescu, 2016. University of Edinburgh.
+// All edits from original version have been made by and belong to Caterina Constantinescu & David Farrell, 2016. University of Edinburgh & Glasgow Caledonian University.
 
 /* activate localStorage */
 var localStore = window.localStorage;
-
-/* this is the short-term store for user event categories */
-var userDefinedCategories; // make global
 
 /* surveyQuestion Model (This time, written in "JSON" format to interface more cleanly with Mustache) */
 var participantSetup = [
@@ -240,8 +237,7 @@ var surveyQuestions = [
     {
         "type": "userCategories_QType",
         "variableName": "Q10_userCategories",
-        "questionPrompt": "How would you classify the recent events (use text only)?"//,
-        //"submitNewPrompt": "Add New"
+        "questionPrompt": "How would you classify the recent events (use text only)?"
     }
 ];
 
@@ -257,6 +253,12 @@ var lastPage = [
 /*Populate the view with data from surveyQuestion model*/
 // Making mustache templates
 // Here you declare global variables as well
+
+/* this is the short-term store for user event categories */
+var uniqueKey;
+
+var userDefinedCategories;
+
 var NUMSETUPQS = participantSetup.length;
 
 var SNOOZEQ = 0;
@@ -299,13 +301,13 @@ var affectButtonTmpl = "" +
     "</div></li>" +
     "<li><button type='submit' value='Enter'>Enter</button></li>";
 
-var addCategoryTmpl = "<li><textarea cols=10 rows=1 id='newCat'></textarea></li><li><button type='submit' value='Add New'>Add New</button></li>";
+var addCategoryTmpl = "<li><textarea class='newCat' id='newCat'></textarea></li><li><button type='submit' value='Add New'>Add New</button></li>";
 
 
 
 
 
-var uniqueKey;
+
 
 var app = {
     // Application Constructor
@@ -506,14 +508,7 @@ var app = {
                 });
                 break;
 
-            case 'userCategories_QType': // List user categories + text entry for new ones
-
-                // this type of question is built from three mini components
-                // first we build a list of buttons from user defined categories
-                // then we add a free text entry box to the bottom of that list
-                // finally we wrap all of that up as a variable that we send to the "questionTmpl" which is
-                // in charge of building the actual page the user sees
-
+            case 'userCategories_QType':
                 // build buttons list
                 question.buttons = "";
                  for (var i = 0; i < userDefinedCategories.length; i++) {
@@ -528,40 +523,29 @@ var app = {
                 // add text box to bottom of button list
                 question.buttons += Mustache.render(addCategoryTmpl, {id: question.variableName+userDefinedCategories.length});
 
-
-
-
-
-                /*
-                 // text entry validation
-                 // two tasks to do
-                 // first - limit char size
-                 // second - make sure it doesn't fire when you submit one of the OTHER buttons (not text button)
-
-                 $("#question ul li button").click(function(){
-                    if (app.validateResponse($("textarea"))){
-                        app.recordResponse($("textarea"), question_index, question.type);
-                    }
-                    else {
-                        alert("Please enter something.");
-                    }
-                });
-                */
-
-
                 // build final question page
                 $("#question").html(Mustache.render(questionTmpl, question)).fadeIn(400);
+
                 $("#question ul li button").click(function(){
-                    app.recordResponse(this, question_index, question.type);
+                    if (this.value == 'Add New') {
+                        var userText = document.getElementById('newCat').value;
+                        if ( userText.length > 30) {
+                            alert("Please keep category name under 30 characters.");
+                        }
+                        else {
+                            app.recordResponse(this, question_index, question.type);
+                        }
+                    }
+                    else {
+                        app.recordResponse(this, question_index, question.type);
+                    }
                 });
 
                 break;
         }
     },
 
-    /*
-        Question Index -1 means just installed app & asked for participant_id for the first time ever.
-     */
+        // Question Index -1 means just installed app & asked for participant_id for the first time ever.
     renderLastPage: function(pageData, question_index) {
         $("#question").html(Mustache.render(lastPageTmpl, pageData));
 
@@ -656,10 +640,7 @@ var app = {
 
             if ( response == "Add New") {
                 response = document.getElementById('newCat').value;
-               // response = temp.value;
-                // remove newlines from user input
-                response = response.replace(/(\r\n|\n|\r)/g, ""); //encodeURIComponent(); decodeURIComponent()
-               // currentQuestion = button.attr('id').slice(0, -1);
+                response = response.replace(/(\r\n|\n|\r)/g, ""); // remove newlines from user input
                 userDefinedCategories.push(response);
             }
 
@@ -678,13 +659,13 @@ var app = {
         //Identify the next question to populate the view
         //This is where you do the Question Logic
         if (count == -1) {
-            // //save metadata vars to localstore for use maintaining state later  this is the logic to handle new users
+            // save metadata vars to localStore for maintaining state later
             localStore.participant_id = response;
             localStore.uniqueKey = uniqueKey;
 
             // shortly, this user's self-defined categories will be stored here
             userDefinedCategories = new Array();
-            userDefinedCategories.push("frustration");
+            //userDefinedCategories.push("frustration");
             localStore.setItem("userDefinedCategories", JSON.stringify(userDefinedCategories));
 
             app.scheduleNotifs(); app.renderLastPage(lastPage[2], count); // "Tx for install, data sent to servers."
@@ -698,30 +679,18 @@ var app = {
             $("#question").fadeOut(400, function () {$("#question").html("");app.renderQuestion(count+1);});
         }
         else if (count == 7 && response == 0) {
-            // we now jump to Q 10 instead of Q9 cause of the new user category data page
             $("#question").fadeOut(400, function () {$("#question").html("");app.renderQuestion(9);});
             localStore[localStore.participant_id + "_" + uniqueKey + "_Q9_numberOfParticipants_" + year + "_" + month + "_" + day + "_" + hours + "_" + minutes + "_" + seconds] = 'None';
         }
         else if (count == 7 && response == 1) {
             $("#question").fadeOut(400, function () {$("#question").html("");app.renderQuestion(8);});
         }
-        else if (count == 9) { // i.e., the new categorization question
-            app.renderLastPage(lastPage[0], count);
-        }
-        /*
-         *  Was:
-         *  else if (count < surveyQuestions.length-1) {
-         *  $("#question").fadeOut(400, function () {$("#question").html("");app.renderQuestion(count+1);});
-         }
-         *  Changed to allow for additions near end of question array - without this one has to add new questions
-         *  earlier in the question array and rewire everything by hand.
-         */
         else if (count < surveyQuestions.length-1) {
             $("#question").fadeOut(400, function () {$("#question").html("");app.renderQuestion(count+1);});
         }
         else  {
-            app.renderLastPage(lastPage[0], count);
-        } // "Thank you for completing the questions"
+            app.renderLastPage(lastPage[0], count); // "Thank you for completing the questions"
+        }
     },
 
     /* Prepare for Resume and Store Data */
@@ -749,7 +718,8 @@ var app = {
         //console.log("We are in SampleParticipant\n " + localStore.uniqueKey + " / " + uniqueKey);
         var current_moment = new Date();
         var current_time = current_moment.getTime();
-        if ((current_time - localStore.pause_time) > 600000 || localStore.snoozed == 1) {
+        // If survey is postponed, it beeps people 10*3 mins later (1/2 hour)
+        if ((current_time - localStore.pause_time) > (600000*3) || localStore.snoozed == 1) {
             uniqueKey = new Date().getTime();
             localStore.snoozed = 0;
             app.renderQuestion(0);
