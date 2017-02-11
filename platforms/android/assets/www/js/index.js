@@ -240,7 +240,7 @@ var surveyQuestions = [
     {
         "type": "userCategories_QType",
         "variableName": "Q10_userCategories",
-        "questionPrompt": "How would you classify the recent events?"//,
+        "questionPrompt": "How would you classify the recent events (use text only)?"//,
         //"submitNewPrompt": "Add New"
     }
 ];
@@ -652,7 +652,16 @@ var app = {
         else if (type == 'userCategories_QType') {
             response = button.value;
             //Create a unique identifier for this response
-            currentQuestion = button.id.slice(0,-1);
+            currentQuestion = "Q10_userCategories";
+
+            if ( response == "Add New") {
+                response = document.getElementById('newCat').value;
+               // response = temp.value;
+                // remove newlines from user input
+                response = response.replace(/(\r\n|\n|\r)/g, ""); //encodeURIComponent(); decodeURIComponent()
+               // currentQuestion = button.attr('id').slice(0, -1);
+                userDefinedCategories.push(response);
+            }
 
         }
 
@@ -669,8 +678,6 @@ var app = {
         //Identify the next question to populate the view
         //This is where you do the Question Logic
         if (count == -1) {
-            app.scheduleNotifs(); app.renderLastPage(lastPage[2], count); // "Tx for install, data sent to servers."
-
             // //save metadata vars to localstore for use maintaining state later  this is the logic to handle new users
             localStore.participant_id = response;
             localStore.uniqueKey = uniqueKey;
@@ -680,6 +687,7 @@ var app = {
             userDefinedCategories.push("frustration");
             localStore.setItem("userDefinedCategories", JSON.stringify(userDefinedCategories));
 
+            app.scheduleNotifs(); app.renderLastPage(lastPage[2], count); // "Tx for install, data sent to servers."
         }
         else if (count == SNOOZEQ && response == 0) {
             app.renderLastPage(lastPage[1], count); // "That's cool, I'll notify you again in 10 mins"
