@@ -93,23 +93,23 @@ var surveyQuestions = [
             {"src": "./img/SAM/V9.png"}
         ],
         "myTexts": [
-            {"myText": "<span style='color:pink; text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;'>" +
+            {"myText": "<span style='color:#86e502; text-shadow: -1px 0 #332929, 0 1px #332929, 1px 0 #332929, 0 -1px #332929;'>" +
             "1. Extremely unpleasant.</span>"},
-            {"myText": "<span style='color:pink; text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;'>" +
+            {"myText": "<span style='color:#86e502; text-shadow: -1px 0 #332929, 0 1px #332929, 1px 0 #332929, 0 -1px #332929;'>" +
             "2.</span>"},
-            {"myText": "<span style='color:pink; text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;'>" +
+            {"myText": "<span style='color:#86e502; text-shadow: -1px 0 #332929, 0 1px #332929, 1px 0 #332929, 0 -1px #332929;'>" +
             "3.</span>"},
-            {"myText": "<span style='color:pink; text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;'>" +
+            {"myText": "<span style='color:#86e502; text-shadow: -1px 0 #332929, 0 1px #332929, 1px 0 #332929, 0 -1px #332929;'>" +
             "4.</span>"},
-            {"myText": "<span style='color:pink; text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;'>" +
+            {"myText": "<span style='color:#86e502; text-shadow: -1px 0 #332929, 0 1px #332929, 1px 0 #332929, 0 -1px #332929;'>" +
             "5. Neither unpleasant, <br> nor pleasant.</span>"},
-            {"myText": "<span style='color:pink; text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;'>" +
+            {"myText": "<span style='color:#86e502; text-shadow: -1px 0 #332929, 0 1px #332929, 1px 0 #332929, 0 -1px #332929;'>" +
             "6.</span>"},
-            {"myText": "<span style='color:pink; text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;'>" +
+            {"myText": "<span style='color:#86e502; text-shadow: -1px 0 #332929, 0 1px #332929, 1px 0 #332929, 0 -1px #332929;'>" +
             "7.</span>"},
-            {"myText": "<span style='color:pink; text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;'>" +
+            {"myText": "<span style='color:#86e502; text-shadow: -1px 0 #332929, 0 1px #332929, 1px 0 #332929, 0 -1px #332929;'>" +
             "8.</span>"},
-            {"myText": "<span style='color:pink; text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;'>" +
+            {"myText": "<span style='color:#86e502; text-shadow: -1px 0 #332929, 0 1px #332929, 1px 0 #332929, 0 -1px #332929;'>" +
             "9. Extremely pleasant.</span>"}
         ]
     },
@@ -132,23 +132,23 @@ var surveyQuestions = [
             {"src": "./img/SAM/A9.png"}
         ],
         "myTexts": [
-            {"myText": "<span style='color:#1aff1a; text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;'>" +
+            {"myText": "<span style='color:#ffeb11; text-shadow: -1px 0 #332929, 0 1px #332929, 1px 0 #332929, 0 -1px #332929;'>" +
             "1. Extremely relaxed /<br>bored / sleepy.</span>"},
-            {"myText": "<span style='color:#1aff1a; text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;'>" +
+            {"myText": "<span style='color:#ffeb11; text-shadow: -1px 0 #332929, 0 1px #332929, 1px 0 #332929, 0 -1px #332929;'>" +
             "2.</span>"},
-            {"myText": "<span style='color:#1aff1a; text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;'>" +
+            {"myText": "<span style='color:#ffeb11; text-shadow: -1px 0 #332929, 0 1px #332929, 1px 0 #332929, 0 -1px #332929;'>" +
             "3.</span>"},
-            {"myText": "<span style='color:#1aff1a; text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;'>" +
+            {"myText": "<span style='color:#ffeb11; text-shadow: -1px 0 #332929, 0 1px #332929, 1px 0 #332929, 0 -1px #332929;'>" +
             "4.</span>"},
-            {"myText": "<span style='color:#1aff1a; text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;'>" +
+            {"myText": "<span style='color:#ffeb11; text-shadow: -1px 0 #332929, 0 1px #332929, 1px 0 #332929, 0 -1px #332929;'>" +
             "5. Neutral.</span>"},
-            {"myText": "<span style='color:#1aff1a; text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;'>" +
+            {"myText": "<span style='color:#ffeb11; text-shadow: -1px 0 #332929, 0 1px #332929, 1px 0 #332929, 0 -1px #332929;'>" +
             "6.</span>"},
-            {"myText": "<span style='color:#1aff1a; text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;'>" +
+            {"myText": "<span style='color:#ffeb11; text-shadow: -1px 0 #332929, 0 1px #332929, 1px 0 #332929, 0 -1px #332929;'>" +
             "7.</span>"},
-            {"myText": "<span style='color:#1aff1a; text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;'>" +
+            {"myText": "<span style='color:#ffeb11; text-shadow: -1px 0 #332929, 0 1px #332929, 1px 0 #332929, 0 -1px #332929;'>" +
             "8.</span>"},
-            {"myText": "<span style='color:#1aff1a; text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;'>" +
+            {"myText": "<span style='color:#ffeb11; text-shadow: -1px 0 #332929, 0 1px #332929, 1px 0 #332929, 0 -1px #332929;'>" +
             "9. Extremely alert /<br>agitated.</span>"}
         ]
     },
@@ -171,23 +171,23 @@ var surveyQuestions = [
             {"src": "./img/SAM/D9.png"}
         ],
         "myTexts": [
-            {"myText": "<span style='color:orange; text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;'>" +
+            {"myText": "<span style='color:orange; text-shadow: -1px 0 #332929, 0 1px #332929, 1px 0 #332929, 0 -1px #332929;'>" +
             "1. Extremely overwhelmed <br> by the situation.</span>"},
-            {"myText": "<span style='color:orange; text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;'>" +
+            {"myText": "<span style='color:orange; text-shadow: -1px 0 #332929, 0 1px #332929, 1px 0 #332929, 0 -1px #332929;'>" +
             "2.</span>"},
-            {"myText": "<span style='color:orange; text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;'>" +
+            {"myText": "<span style='color:orange; text-shadow: -1px 0 #332929, 0 1px #332929, 1px 0 #332929, 0 -1px #332929;'>" +
             "3.</span>"},
-            {"myText": "<span style='color:orange; text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;'>" +
+            {"myText": "<span style='color:orange; text-shadow: -1px 0 #332929, 0 1px #332929, 1px 0 #332929, 0 -1px #332929;'>" +
             "4.</span>"},
-            {"myText": "<span style='color:orange; text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;'>" +
+            {"myText": "<span style='color:orange; text-shadow: -1px 0 #332929, 0 1px #332929, 1px 0 #332929, 0 -1px #332929;'>" +
             "5. Neither overwhelmed, <br> nor in control.</span>"},
-            {"myText": "<span style='color:orange; text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;'>" +
+            {"myText": "<span style='color:orange; text-shadow: -1px 0 #332929, 0 1px #332929, 1px 0 #332929, 0 -1px #332929;'>" +
             "6.</span>"},
-            {"myText": "<span style='color:orange; text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;'>" +
+            {"myText": "<span style='color:orange; text-shadow: -1px 0 #332929, 0 1px #332929, 1px 0 #332929, 0 -1px #332929;'>" +
             "7.</span>"},
-            {"myText": "<span style='color:orange; text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;'>" +
+            {"myText": "<span style='color:orange; text-shadow: -1px 0 #332929, 0 1px #332929, 1px 0 #332929, 0 -1px #332929;'>" +
             "8.</span>"},
-            {"myText": "<span style='color:orange; text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;'>" +
+            {"myText": "<span style='color:orange; text-shadow: -1px 0 #332929, 0 1px #332929, 1px 0 #332929, 0 -1px #332929;'>" +
             "9. Extremely in control <br> of the situation.</span>"}
         ]
     },
@@ -237,7 +237,9 @@ var surveyQuestions = [
     {
         "type": "userCategories_QType",
         "variableName": "Q10_userCategories",
-        "questionPrompt": "How would you classify the recent events (use text only)?"
+        "questionPrompt": "<p style='margin: 0.8em'>How would you classify the recent events?</p>" +
+        "<p style='margin: 0.4em'>Please use the text box to add new categories, " +
+        "<br> or tap & re-use previous categories, when available.</p>"
     }
 ];
 
@@ -531,6 +533,9 @@ var app = {
                         var userText = document.getElementById('newCat').value;
                         if ( userText.length > 30) {
                             alert("Please keep category name under 30 characters.");
+                        }
+                        else if (userText.length < 3) {
+                            alert("Please provide a meaningful category name.");
                         }
                         else {
                             app.recordResponse(this, question_index, question.type);
