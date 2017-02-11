@@ -27,11 +27,10 @@
 /* activate localStorage */
 var localStore = window.localStorage;
 
-// this is teh short term store for user event categories
-var userDefinedCategories = [];
+/* this is the short-term store for user event categories */
+var userDefinedCategories; // make global
 
 /* surveyQuestion Model (This time, written in "JSON" format to interface more cleanly with Mustache) */
-
 var participantSetup = [
     {
         "type": "instructions",
@@ -71,25 +70,14 @@ var surveyQuestions = [
         "<br>" +
         "<p>Hi there!</p>" +
         "<br>" +
-        "<p> On the following screens, we will be asking you questions about your emotional experiences within the last 30 minutes.</p>" +
+        "<p>On the following screens, we will be asking you questions about your emotional experiences within the last 30 minutes.</p>" +
         "<br>" +
         "<p>Press NEXT to rate how you are currently feeling.</p>" +
         "<br>" +
         "<p><u>Please note:</u> You should scroll down to see all the buttons listed!</p>" +
         "<br>"
     },
-    /*Old #2 :
-    {
-        "type": "slider",
-        "variableName": "Q3_thermometerValence",
-        "questionPrompt": "<p>Please indicate how you are feeling at the moment, where:</p>" +
-                          "<p>100 = extremely pleasant;</p>" +
-                          "<p>50 = neither pleasant, nor unpleasant;</p>" +
-                          "<p>0 = extremely unpleasant.</p>" +
-                          "<p>You can give your answer by moving the slider up or down, and you can see the value to the right of the slider.</p>",
-        "minResponse": 0,
-        "maxResponse": 100
-    },*/
+    /*2*/
     {
         "type": "multImg",
         "variableName": "Q3_Valence",
@@ -248,34 +236,16 @@ var surveyQuestions = [
             {"label": "Over 7"}
         ]
     },
-    /*9*/
+    /* 9 */
     {
-        "type": "mult1",
-        "variableName": "Q10_eventCategory",
-        "questionPrompt": "Would you class the recent events as:",
-        "minResponse": 1,
-        "maxResponse": 7,
-        "labels":[
-            {"label": "Neutral"},
-            {"label": "Overall positive"},
-            {"label": "Overall negative"},
-            {"label": "Positive, and also exciting"},
-            {"label": "Positive, and also relaxing"},
-            {"label": "Negative, but unexciting"},
-            {"label": "Negative, but very intense"}
-        ]
-    },
-    /* 10 */
-    // This question handles user submission of categories (userDefinedCategories)
-    {
-        "type": "userCategories",
-        "variableName": "Q11_userCategories",
-        "questionPrompt": "How would you classify the recent events?",
-        "submitNewPrompt": "Add New"
+        "type": "userCategories_QType",
+        "variableName": "Q10_userCategories",
+        "questionPrompt": "How would you classify the recent events?"//,
+        //"submitNewPrompt": "Add New"
     }
 ];
-// this int should point to the last question the user answers
-var lastQuestionIndex = 10;
+
+
 
 var lastPage = [
     {"message": "Thank you for completing this session's questions. Please wait while the data is sent to our servers..."},
@@ -286,7 +256,7 @@ var lastPage = [
 
 /*Populate the view with data from surveyQuestion model*/
 // Making mustache templates
-//Here you declare global variables are well
+// Here you declare global variables as well
 var NUMSETUPQS = participantSetup.length;
 
 var SNOOZEQ = 0;
@@ -329,8 +299,11 @@ var affectButtonTmpl = "" +
     "</div></li>" +
     "<li><button type='submit' value='Enter'>Enter</button></li>";
 
-// this is the html template for the userCategories question (userDefinedCategories) // DF NOTE DELETE??
-//var userCategoriesTmpl = "";
+var addCategoryTmpl = "<li><textarea cols=10 rows=1 id='newCat'></textarea></li><li><button type='submit' value='Add New'>Add New</button></li>";
+
+
+
+
 
 var uniqueKey;
 
@@ -453,7 +426,8 @@ var app = {
                 break;
 
             case 'slider':
-                question.buttons = Mustache.render(sliderTmpl, {id: question.variableName+"1"}, {min: question.minResponse}, {max: question.maxResponse}, {value: (question.maxResponse)/2});
+                question.buttons = Mustache.render(sliderTmpl, {id: question.variableName+"1"},
+                    {min: question.minResponse}, {max: question.maxResponse}, {value: (question.maxResponse)/2});
                 $("#question").html(Mustache.render(questionTmpl, question)).fadeIn(400);
                 var slider = [];
                 $("#question ul li button").click(function(){
@@ -532,7 +506,7 @@ var app = {
                 });
                 break;
 
-            case 'userCategories': // List user categories + text entry for new ones
+            case 'userCategories_QType': // List user categories + text entry for new ones
 
                 // this type of question is built from three mini components
                 // first we build a list of buttons from user defined categories
@@ -552,7 +526,11 @@ var app = {
                 }
 
                 // add text box to bottom of button list
-                question.buttons += Mustache.render(textTmpl, {id: question.variableName+userDefinedCategories.length});
+                question.buttons += Mustache.render(addCategoryTmpl, {id: question.variableName+userDefinedCategories.length});
+
+
+
+
 
                 /*
                  // text entry validation
@@ -671,21 +649,11 @@ var app = {
             response = "p_" + pleasure + "_a_" + arousal +"_d_"+ dominance;
             currentQuestion = "Q6_affectFace"; // Remember to edit Q6 here if necessary, as it is hard-coded.
         }
+        else if (type == 'userCategories_QType') {
+            response = button.value;
+            //Create a unique identifier for this response
+            currentQuestion = button.id.slice(0,-1);
 
-        //save metadata vars to localstore for use maintaining state later  this is the logic to handle new users
-        if (currentQuestion == "participant_id") {
-            localStore.participant_id = response;
-            localStore.uniqueKey = uniqueKey;
-
-            // shortly, this user's self-defined categories will be stored here
-            userDefinedCategories = new Array();
-            userDefinedCategories.push("frustration");
-
-
-        } else if (currentQuestion == "Q1_pressPlay"){
-            // this is where we load the user categories from the localStore and turn it back into an array
-            //userDefinedCategories = new Array(5);
-            userDefinedCategories = JSON.parse(localStore.getItem("userDefinedCategories"));
         }
 
         uniqueRecord = localStore.participant_id + "_" + uniqueKey + "_" + currentQuestion + "_" + year + "_" + month + "_" + day + "_" + hours + "_" + minutes + "_" + seconds;
@@ -700,32 +668,47 @@ var app = {
 
         //Identify the next question to populate the view
         //This is where you do the Question Logic
-        //if (count <= -1) {console.log(uniqueRecord);}
         if (count == -1) {
-            app.scheduleNotifs(); app.renderLastPage(lastPage[2], count);
-        } // "Tx for install, data sent to servers."
-        else if (count == SNOOZEQ && response == 0) {
-            app.renderLastPage(lastPage[1], count);
-        } // "That's cool, I'll notify you again in 10mins"
+            app.scheduleNotifs(); app.renderLastPage(lastPage[2], count); // "Tx for install, data sent to servers."
 
+            // //save metadata vars to localstore for use maintaining state later  this is the logic to handle new users
+            localStore.participant_id = response;
+            localStore.uniqueKey = uniqueKey;
+
+            // shortly, this user's self-defined categories will be stored here
+            userDefinedCategories = new Array();
+            userDefinedCategories.push("frustration");
+            localStore.setItem("userDefinedCategories", JSON.stringify(userDefinedCategories));
+
+        }
+        else if (count == SNOOZEQ && response == 0) {
+            app.renderLastPage(lastPage[1], count); // "That's cool, I'll notify you again in 10 mins"
+        }
+        else if (count == 1){
+            // this is where we load the user categories from the localStore and turn it back into an array
+            userDefinedCategories = JSON.parse(localStore.getItem("userDefinedCategories"));
+            $("#question").fadeOut(400, function () {$("#question").html("");app.renderQuestion(count+1);});
+        }
         else if (count == 7 && response == 0) {
             // we now jump to Q 10 instead of Q9 cause of the new user category data page
-            $("#question").fadeOut(400, function () {$("#question").html("");app.renderQuestion(10);});
+            $("#question").fadeOut(400, function () {$("#question").html("");app.renderQuestion(9);});
             localStore[localStore.participant_id + "_" + uniqueKey + "_Q9_numberOfParticipants_" + year + "_" + month + "_" + day + "_" + hours + "_" + minutes + "_" + seconds] = 'None';
         }
         else if (count == 7 && response == 1) {
             $("#question").fadeOut(400, function () {$("#question").html("");app.renderQuestion(8);});
         }
-        // jump frm Q[8] to Q[10] because of new user defined categories screen
-        else if (count == 8) {
-            $("#question").fadeOut(400, function () {$("#question").html("");app.renderQuestion(10);});
+        else if (count == 9) { // i.e., the new categorization question
+            app.renderLastPage(lastPage[0], count);
         }
         /*
-         *  Was: else if (count < surveyQuestions.length-1) {
+         *  Was:
+         *  else if (count < surveyQuestions.length-1) {
+         *  $("#question").fadeOut(400, function () {$("#question").html("");app.renderQuestion(count+1);});
+         }
          *  Changed to allow for additions near end of question array - without this one has to add new questions
          *  earlier in the question array and rewire everything by hand.
          */
-        else if (count < lastQuestionIndex) {
+        else if (count < surveyQuestions.length-1) {
             $("#question").fadeOut(400, function () {$("#question").html("");app.renderQuestion(count+1);});
         }
         else  {
@@ -810,7 +793,7 @@ var app = {
                 localStore.pause_time = pause_time;
 
 
-                console.log("save data 1");
+                // console.log("save data 1");
                 // convert the array of user categories to a string for localStore
                 localStore.setItem("userDefinedCategories", JSON.stringify(userDefinedCategories));
             },
@@ -847,9 +830,9 @@ var app = {
                 localStore.uniqueKey = uniqueKey;
                 localStore.pause_time = pause_time;
 
-                console.log("save data 2");
+                // console.log("save data 2");
                 // convert the array of user categories to a string for localStore
-                localStore.setItem("userDefinedCategories", JSON.stringify(userDefinedCategories))
+                localStore.setItem("userDefinedCategories", JSON.stringify(userDefinedCategories));
 
                 $("#question").html("" +
                     "<h3>" +
