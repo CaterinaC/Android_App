@@ -32,17 +32,20 @@ var participantSetup = [
     {
         "type": "instructions",
         "variableName": "welcomeMessage",
-        "questionPrompt": "<p>Hello, and thanks for installing our app!</p>" +
-                          "<p>You will be beeped 4 times a day over the next 2 weeks, and asked to answer some questions here.</p>" +
-                          "<p>Press the button below to continue!</p>"
+        "questionPrompt": "<p style='margin: 2.8em'>Hello, and thanks for installing our app!</p>" +
+                          "<p style='margin: 2.8em'>You will be beeped 4 times a day over the next 2 weeks, and asked to answer some questions here.</p>" +
+                          "<p style='margin: 2.8em'>Press the button below to continue!<br><br></p>"
     },
     {
 
-        "type": "text",
+        "type": "narrowText",
         "variableName": "participant_id",
-        "questionPrompt": "<p>Please type in your participant ID as:</p>" +
-                          "<p>Your initials + Year of birth + First letter from country of origin.</p>" +
-                          "<p align='left'><u>EXAMPLE:</u> AF1990S, for Alex Farrell, born in 1990, in Scotland.</p>" // Align center is the default.
+        "questionPrompt": "<p style='margin: 2.8em'>Please type in your participant ID as:</p>" +
+                          "<p style='margin: 2.8em'>Your initials + <br> Year of birth + " +
+        "                                          <br> First letter from country of origin.<br><br></p>" +
+                          "<p style='margin: 0.8em' align='left'><u>EXAMPLE:</u><br><br></p>" +
+                          "<p style='margin: 0.8em' align='left'>AF1990S, for: </p>" +
+                          "<p style='margin: 0.8em' align='left'>Alex Farrell, born in 1990, in Scotland.<br><br> </p>"
     }
 ];
 
@@ -303,8 +306,10 @@ var affectButtonTmpl = "" +
     "</div></li>" +
     "<li><button type='submit' value='Enter'>Enter</button></li>";
 
-var addCategoryTmpl = "<li><textarea class='newCat' id='newCat'></textarea></li><li><button type='submit' value='Add New'>Add New</button></li>";
+var addCategoryTmpl = "<li><textarea class='narrowText' id='narrowText'></textarea></li><li><button type='submit' value='Add New'>Add New</button></li>";
 
+
+var narrowTextTmpl = "<li><textarea class='narrowText' cols=50 rows=5 id='{{id}}'></textarea></li><li><button type='submit' value='Enter'>Enter</button></li>";
 
 
 
@@ -530,7 +535,7 @@ var app = {
 
                 $("#question ul li button").click(function(){
                     if (this.value == 'Add New') {
-                        var userText = document.getElementById('newCat').value;
+                        var userText = document.getElementById('narrowText').value;
                         if ( userText.length > 30) {
                             alert("Please keep category name under 30 characters.");
                         }
@@ -547,6 +552,19 @@ var app = {
                 });
 
                 break;
+            case 'narrowText': //default to open-ended text
+                question.buttons = Mustache.render(narrowTextTmpl, {id: question.variableName+"1"});
+                $("#question").html(Mustache.render(questionTmpl, question)).fadeIn(400);
+                $("#question ul li button").click(function(){
+                    if (app.validateResponse($("textarea"))){
+                        app.recordResponse($("textarea"), question_index, question.type);
+                    }
+                    else {
+                        alert("Please enter something.");
+                    }
+                });
+                break;
+
         }
     },
 
@@ -644,12 +662,19 @@ var app = {
             currentQuestion = "Q10_userCategories";
 
             if ( response == "Add New") {
-                response = document.getElementById('newCat').value;
+                response = document.getElementById('narrowText').value;
                 response = response.replace(/(\r\n|\n|\r)/g, ""); // remove newlines from user input
                 userDefinedCategories.push(response);
             }
 
         }
+        else if (type == 'narrowText') {
+            response = button.val();
+            // remove newlines from user input
+            response = response.replace(/(\r\n|\n|\r)/g, ""); //encodeURIComponent(); decodeURIComponent()
+            currentQuestion = button.attr('id').slice(0,-1);
+        }
+
 
         uniqueRecord = localStore.participant_id + "_" + uniqueKey + "_" + currentQuestion + "_" + year + "_" + month + "_" + day + "_" + hours + "_" + minutes + "_" + seconds;
 
@@ -680,7 +705,13 @@ var app = {
         }
         else if (count == 1){
             // this is where we load the user categories from the localStore and turn it back into an array
-            userDefinedCategories = JSON.parse(localStore.getItem("userDefinedCategories"));
+            // defending here against an edge case where user quit app before category array initialised
+            if ( localStore.getItem("userDefinedCategories") == "undefined") {
+                userDefinedCategories = new Array();
+            }
+            else {
+                userDefinedCategories = JSON.parse(localStore.getItem("userDefinedCategories"));
+            }
             $("#question").fadeOut(400, function () {$("#question").html("");app.renderQuestion(count+1);});
         }
         else if (count == 7 && response == 0) {
@@ -723,8 +754,8 @@ var app = {
         //console.log("We are in SampleParticipant\n " + localStore.uniqueKey + " / " + uniqueKey);
         var current_moment = new Date();
         var current_time = current_moment.getTime();
-        // If survey is postponed, it beeps people 10*3 mins later (1/2 hour)
-        if ((current_time - localStore.pause_time) > (600000*3) || localStore.snoozed == 1) {
+        // If survey is postponed, it beeps people 10 mins later
+        if ((current_time - localStore.pause_time) > 600000 || localStore.snoozed == 1) {
             uniqueKey = new Date().getTime();
             localStore.snoozed = 0;
             app.renderQuestion(0);
@@ -890,7 +921,7 @@ var app = {
     },
 
     snoozeNotif:function() {
-        var now = new Date().getTime(), snoozeDate = new Date(now + 600*1000); // 10 minutes
+        var now = new Date().getTime(), snoozeDate = new Date(now + 1800000); // 30 minutes delay if app is snoozed
         var id = '99';
         cordova.plugins.notification.local.schedule({
             icon: 'ic_launcher',
