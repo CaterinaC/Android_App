@@ -242,16 +242,16 @@ var surveyQuestions = [
         "variableName": "Q10_userCategories",
         "questionPrompt": "<p style='margin: 0.8em'>How would you classify the recent events?</p>" +
         "<p style='margin: 0.4em'>Please use the text box to add new categories, " +
-        "<br> or tap & re-use previous categories, when available.</p>"
+        "<br> or re-use previous categories, when available.</p>"
     }
 ];
 
 
 
 var lastPage = [
-    {"message": "Thank you for completing this session's questions. Please wait while the data is sent to our servers..."},
-    {"message": "That's cool! I'll notify you again in 30 minutes!"},
-    {"message": "Thanks again for installing our app. Please wait while the data is sent to our servers..."}
+    {"message": "Thank you for completing this session's questions. <br><br> Please wait while the data is sent to our servers..."},
+    {"message": "That's cool! I'll notify you again in 30 minutes! <br><br> For now, you can close the app."},
+    {"message": "Thanks again for installing our app. <br><br> Please wait while the data is sent to our servers..."}
 ];
 
 
@@ -297,7 +297,7 @@ var dateAndTimePickerTmpl = '<li><input id="{{id}}" data-format="DD-MM-YYYY-HH-m
 
 var timePickerTmpl = '<li><input id="{{id}}" data-format="HH:mm" data-template="HH : mm" name="time"><br /><br /></li><li><button type="submit" value="Enter">Enter</button></li><script>$(function(){$("input").combodate({firstItem: "name"});});</script>';
 
-var lastPageTmpl = "<h3>{{message}}</h3>";
+var lastPageTmpl = "<h3>{{{message}}}</h3>";
 
 var affectButtonTmpl = "" +
     "<style>html, body, iframe{margin: 0; border: 0; padding: 0; display: block; width: 100vw; height: 90vh;}</style>" +
