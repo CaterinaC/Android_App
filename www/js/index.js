@@ -247,7 +247,7 @@ var surveyQuestions = [
 
 var lastPage = [
     {"message": "Thank you for completing this session's questions. Please wait while the data is sent to our servers..."},
-    {"message": "That's cool! I'll notify you again in 10 minutes!"},
+    {"message": "That's cool! I'll notify you again in 30 minutes!"},
     {"message": "Thanks again for installing our app. Please wait while the data is sent to our servers..."}
 ];
 
