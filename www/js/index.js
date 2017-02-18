@@ -665,6 +665,9 @@ var app = {
                 response = document.getElementById('narrowText').value;
                 response = response.replace(/(\r\n|\n|\r)/g, ""); // remove newlines from user input
                 userDefinedCategories.push(response);
+
+                //because we updated the userDefinedCategories, the localStore version is out of date. So update here.
+                localStore.setItem("userDefinedCategories", JSON.stringify(userDefinedCategories));
             }
 
         }
@@ -694,8 +697,6 @@ var app = {
             localStore.uniqueKey = uniqueKey;
 
             // shortly, this user's self-defined categories will be stored here
-            userDefinedCategories = new Array();
-            //userDefinedCategories.push("frustration");
             localStore.setItem("userDefinedCategories", JSON.stringify(userDefinedCategories));
 
             app.scheduleNotifs(); app.renderLastPage(lastPage[2], count); // "Tx for install, data sent to servers."
@@ -704,14 +705,7 @@ var app = {
             app.renderLastPage(lastPage[1], count); // "That's cool, I'll notify you again in 10 mins"
         }
         else if (count == 1){
-            // this is where we load the user categories from the localStore and turn it back into an array
-            // defending here against an edge case where user quit app before category array initialised
-            if ( localStore.getItem("userDefinedCategories") == "undefined") {
-                userDefinedCategories = new Array();
-            }
-            else {
-                userDefinedCategories = JSON.parse(localStore.getItem("userDefinedCategories"));
-            }
+
             $("#question").fadeOut(400, function () {$("#question").html("");app.renderQuestion(count+1);});
         }
         else if (count == 7 && response == 0) {
@@ -739,6 +733,15 @@ var app = {
     /* Initialize the whole thing */
     init: function() {
         uniqueKey = new Date().getTime();
+
+        // this is where we load the user categories from the localStore and turn it back into an array
+        // defending here against an edge case where user quit app before category array initialised
+        if ( localStore.getItem("userDefinedCategories") == "undefined") {
+            userDefinedCategories = new Array();
+        }
+        else {
+            userDefinedCategories = JSON.parse(localStore.getItem("userDefinedCategories"));
+        }
 
         if (localStore.participant_id === " " || !localStore.participant_id) {app.renderQuestion(-NUMSETUPQS);}
         else {
@@ -791,6 +794,7 @@ var app = {
         delete localStore.uniqueKey;
         delete localStore.pause_time;
         */
+
 
         $.ajax({
             type: 'get',
