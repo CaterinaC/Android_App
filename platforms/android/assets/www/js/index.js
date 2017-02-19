@@ -727,6 +727,16 @@ var app = {
     /* Time stamps the current moment to determine how to resume */
     pauseEvents: function() {
         localStore.pause_time = new Date().getTime();
+
+
+        var datestamp = new Date();
+        var year = datestamp.getFullYear(), month = datestamp.getMonth(), day=datestamp.getDate(), hours=datestamp.getHours(), minutes=datestamp.getMinutes(), seconds=datestamp.getSeconds();
+
+
+        var debugPause = localStore.participant_id + "_" + uniqueKey + "_appPaused";
+        localStore[debugPause] = "current_day-time["+year+"_"+month+"_"+day+"_"+hours+"_"+minutes+"_"+seconds+"]_pause_time["+ localStore.pause_time + "]_snoozed["+localStore.snoozed+"]";
+
+
         app.saveData();
     },
 
@@ -757,7 +767,16 @@ var app = {
         localStore.snoozed = 0;
     },
 
+    // called upon EVERY resume of app - from pause etc
     sampleParticipant: function() {
+
+        var datestamp = new Date();
+        var year = datestamp.getFullYear(), month = datestamp.getMonth(), day=datestamp.getDate(), hours=datestamp.getHours(), minutes=datestamp.getMinutes(), seconds=datestamp.getSeconds();
+
+        var debugResume = localStore.participant_id + "_" + uniqueKey + "_appResumed";
+        localStore[debugResume] = "current_day-time["+year+"_"+month+"_"+day+"_"+hours+"_"+minutes+"_"+seconds+"]_pause_time["+ localStore.pause_time + "]_snoozed["+localStore.snoozed+"]";
+
+
 
         //console.log("We are in SampleParticipant\n " + localStore.uniqueKey + " / " + uniqueKey);
         var current_moment = new Date();
@@ -767,6 +786,9 @@ var app = {
             uniqueKey = new Date().getTime();
             localStore.uniqueKey = uniqueKey;
 
+            var debugResume = localStore.participant_id + "_" + uniqueKey + "_longPauseHappened";
+            localStore[debugResume] = "current_time["+current_time+"]_pause_time["+ localStore.pause_time + "]_snoozed["+localStore.snoozed+"]";
+
             localStore.snoozed = 0;
             app.renderQuestion(0);
         }
@@ -774,15 +796,24 @@ var app = {
         {
             // if local store UK is gone but local copy still exists, we shove it back into LS
             localStore.uniqueKey = uniqueKey;
+
+
+            var debugResume = localStore.participant_id + "_" + uniqueKey + "_lostLSUK_haveGlobalUK";
+            localStore[debugResume] = "current_time["+current_time+"]_pause_time["+ localStore.pause_time + "]_snoozed["+localStore.snoozed+"]";
         }
-        else {
+        else if (isNaN(localStore.uniqueKey) &&  isNaN(uniqueKey)) {
             // we managed to lose UK in both local store and memory, so make a new one and note for analysis later
-            uniqueKey = new Date().getTime() +  "_Unique_key_was_lost";
+            uniqueKey = new Date().getTime();
             localStore.uniqueKey = uniqueKey;
+
+
+            var debugResume = localStore.participant_id + "_" + uniqueKey + "_lostLSUK_andGlobalUK";
+            localStore[debugResume] = "current_time["+current_time+"]_pause_time["+ localStore.pause_time + "]_snoozed["+localStore.snoozed+"]";
         }
-        app.saveData();
+        //app.saveData();
     },
 
+    // this gets called every time app is paused, even for just a second
     saveData:function() {
         // take a local copy of app state data to rebuild localStore in a minute
         var pid = localStore.participant_id, snoozed = localStore.snoozed, pause_time = localStore.pause_time;
@@ -805,7 +836,7 @@ var app = {
                 // rebuild localStore state data
                 localStore.participant_id = pid;
                 localStore.snoozed = snoozed;
-              //  localStore.uniqueKey = uniqueKey;
+                localStore.uniqueKey = uniqueKey;
                 localStore.pause_time = pause_time;
 
 
@@ -821,6 +852,7 @@ var app = {
         });
     },
 
+    // this gets called at end of submission
     saveDataLastPage:function() {
         // take a local copy of app state data to rebuild localStore in a minute
         var pid = localStore.participant_id, snoozed = localStore.snoozed, pause_time = localStore.pause_time;
