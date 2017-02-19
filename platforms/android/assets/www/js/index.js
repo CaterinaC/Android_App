@@ -259,9 +259,9 @@ var lastPage = [
 // Making mustache templates
 // Here you declare global variables as well
 
-/* this is the short-term store for user event categories */
 var uniqueKey;
 
+/* this is the short-term store for user event categories */
 var userDefinedCategories;
 
 var NUMSETUPQS = participantSetup.length;
@@ -694,7 +694,7 @@ var app = {
         if (count == -1) {
             // save metadata vars to localStore for maintaining state later
             localStore.participant_id = response;
-            localStore.uniqueKey = uniqueKey;
+          //  localStore.uniqueKey = uniqueKey;
 
             // shortly, this user's self-defined categories will be stored here
             localStore.setItem("userDefinedCategories", JSON.stringify(userDefinedCategories));
@@ -733,20 +733,25 @@ var app = {
     /* Initialize the whole thing */
     init: function() {
         uniqueKey = new Date().getTime();
+        localStore.uniqueKey = uniqueKey;
 
         // this is where we load the user categories from the localStore and turn it back into an array
         // defending here against an edge case where user quit app before category array initialised
-        if ( localStore.getItem("userDefinedCategories") == "undefined") {
+        if ( localStore.getItem("userDefinedCategories") == "undefined" || localStore.getItem("userDefinedCategories") == null) {
             userDefinedCategories = new Array();
+            localStore.setItem("userDefinedCategories", JSON.stringify(userDefinedCategories));
         }
         else {
+            // one possible edge case error to catch if this doesn't work is length 0
             userDefinedCategories = JSON.parse(localStore.getItem("userDefinedCategories"));
         }
 
-        if (localStore.participant_id === " " || !localStore.participant_id) {app.renderQuestion(-NUMSETUPQS);}
+        if (localStore.participant_id === " " || !localStore.participant_id) {
+            app.renderQuestion(-NUMSETUPQS);
+        }
         else {
-            uniqueKey = new Date().getTime();
-            localStore.uniqueKey = uniqueKey;
+            // not needed -delete?
+            // uniqueKey = new Date().getTime();
             app.renderQuestion(0);
         }
         localStore.snoozed = 0;
@@ -760,34 +765,27 @@ var app = {
         // If survey is postponed, it beeps people 10 mins later
         if ((current_time - localStore.pause_time) > 600000 || localStore.snoozed == 1) {
             uniqueKey = new Date().getTime();
+            localStore.uniqueKey = uniqueKey;
+
             localStore.snoozed = 0;
             app.renderQuestion(0);
         }
+        else if (isNaN(localStore.uniqueKey) &&  !isNaN(uniqueKey))
+        {
+            // if local store UK is gone but local copy still exists, we shove it back into LS
+            localStore.uniqueKey = uniqueKey;
+        }
         else {
-            if (!isNaN(localStore.uniqueKey)) {
-                uniqueKey = localStore.uniqueKey;
-            } else {
-                /* We don't know why, but for some reason, we lose the uniqueKey session identifier.
-                 Here, the global uniqueKey variable remains in memory, but disappears from the localStore
-                 (which is ultimately what is sent to Google, not the global variables).
-                 This is why we first try to use the global uniqueKey to restore the localStore one.
-                 But failing, that, if we've simply lost it, we create a new session uniqueKey and
-                 we append a string to the end, so it's easy to identify in the sorted Google Sheets
-                 whenever the session ID was lost. */
-                if ( !isNaN(uniqueKey)) {
-                    localStore.uniqueKey = uniqueKey;
-                } else {
-                    uniqueKey = new Date().getTime()+  "_Unique_key_was_lost";
-                }
-            }
+            // we managed to lose UK in both local store and memory, so make a new one and note for analysis later
+            uniqueKey = new Date().getTime() +  "_Unique_key_was_lost";
+            localStore.uniqueKey = uniqueKey;
         }
         app.saveData();
     },
 
     saveData:function() {
         // take a local copy of app state data to rebuild localStore in a minute
-        var pid = localStore.participant_id, snoozed = localStore.snoozed,
-            uniqueKey = localStore.uniqueKey, pause_time = localStore.pause_time;
+        var pid = localStore.participant_id, snoozed = localStore.snoozed, pause_time = localStore.pause_time;
 
         /* remove state data from localStore so that it isn't sent to database every time
         delete localStore.snoozed;
@@ -807,7 +805,7 @@ var app = {
                 // rebuild localStore state data
                 localStore.participant_id = pid;
                 localStore.snoozed = snoozed;
-                localStore.uniqueKey = uniqueKey;
+              //  localStore.uniqueKey = uniqueKey;
                 localStore.pause_time = pause_time;
 
 
@@ -825,8 +823,7 @@ var app = {
 
     saveDataLastPage:function() {
         // take a local copy of app state data to rebuild localStore in a minute
-        var pid = localStore.participant_id, snoozed = localStore.snoozed,
-            uniqueKey = localStore.uniqueKey, pause_time = localStore.pause_time;
+        var pid = localStore.participant_id, snoozed = localStore.snoozed, pause_time = localStore.pause_time;
 
         /* remove state data from localStore so that it isn't sent to database every time
         delete localStore.snoozed;
@@ -845,7 +842,7 @@ var app = {
                 // rebuild localStore
                 localStore.participant_id = pid;
                 localStore.snoozed = snoozed;
-                localStore.uniqueKey = uniqueKey;
+               // localStore.uniqueKey = uniqueKey;
                 localStore.pause_time = pause_time;
 
                 // console.log("save data 2");
